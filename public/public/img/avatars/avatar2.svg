@@ -1,0 +1,22 @@
+<svg width="88" height="111" viewBox="0 0 88 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2.88545e-05 94.2568C6.74623 76.5666 23.8707 64 43.9302 64C63.9897 64 81.1141 76.5666 87.8603 94.2568C76.1921 104.671 60.8003 111 43.9302 111C27.0601 111 11.6683 104.671 2.88545e-05 94.2568Z" fill="#2D94CE"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M26.0811 67.5078C31.5845 65.2468 37.6117 64 43.9302 64C50.1136 64 56.0181 65.1941 61.4257 67.3642C59.8502 75.6975 52.5309 82 43.7395 82C34.9987 82 27.7131 75.7697 26.0811 67.5078Z" fill="#E4B08D"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M26.0811 67.5078C31.5845 65.2468 37.6117 64 43.9302 64C50.1136 64 56.0181 65.1941 61.4257 67.3642C59.8502 75.6975 52.5309 82 43.7395 82C34.9987 82 27.7131 75.7697 26.0811 67.5078Z" fill="black" fill-opacity="0.1"/>
+<circle cx="21" cy="21" r="21" transform="matrix(1 0 0 -1 13 45)" fill="#BF8E60"/>
+<circle cx="19" cy="19" r="19" transform="matrix(1 0 0 -1 37 38)" fill="#BF8E60"/>
+<rect x="17" y="44" width="53" height="16" rx="8" fill="#E4B08D"/>
+<rect x="17" y="44" width="53" height="16" rx="8" fill="black" fill-opacity="0.1"/>
+<path d="M23 33.5C23 22.1782 32.1782 13 43.5 13V13C54.8218 13 64 22.1782 64 33.5V55C64 63.8366 56.8366 71 48 71H39C30.1634 71 23 63.8366 23 55V33.5Z" fill="#E4B08D"/>
+<circle cx="32" cy="22" r="14" fill="#BF8E60"/>
+<circle cx="47" cy="20" r="11" fill="#BF8E60"/>
+<circle cx="61" cy="22" r="8" fill="#BF8E60"/>
+<rect x="29" y="41" width="7" height="3" rx="1.5" fill="#BF8E60"/>
+<rect x="52" y="41" width="7" height="3" rx="1.5" fill="#BF8E60"/>
+<circle cx="37.5" cy="49.5" r="2.5" fill="#1D1D28"/>
+<circle cx="50.5" cy="49.5" r="2.5" fill="#1D1D28"/>
+<path d="M39 55.8333C39 55.3731 39.3731 55 39.8333 55H48.1667C48.6269 55 49 55.3731 49 55.8333V55.8333C49 58.1345 47.1345 60 44.8333 60H43.1667C40.8655 60 39 58.1345 39 55.8333V55.8333Z" fill="#F9F9F9"/>
+<circle cx="34" cy="55" r="2" fill="#E4B08D"/>
+<circle cx="34" cy="55" r="2" fill="black" fill-opacity="0.1"/>
+<circle cx="54" cy="55" r="2" fill="#E4B08D"/>
+<circle cx="54" cy="55" r="2" fill="black" fill-opacity="0.1"/>
+</svg>

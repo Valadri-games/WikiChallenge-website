@@ -2,3 +2,207 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* Override rem size */
+
+:root {
+    font-size: 11.2px;
+}
+
+/* Root variables */
+
+:root {
+    --color-900: #F4F4F4;
+    --color-800: #eeecec;
+    --color-100: #62506D;
+
+    --color-accent-1: #AE8BBF;
+    --color-accent-1-darker: #A075B4;
+    --color-accent-2: #E0CEE6;
+}
+
+/* Body */
+
+body {
+    font-family: "Poppins", sans-serif;
+    overscroll-behavior-y: contain;
+}
+
+/* General style */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+img {
+    user-select: none;
+    pointer-events: none
+}
+
+input::placeholder {
+    color: var(--color-100);
+    opacity: 0.6;
+}
+
+.text-size {
+    font-size: 28px;
+    line-height: 38px;
+    font-weight: 600;
+}
+
+.header-size {
+    font-size: 40px;
+    line-height: 40px;
+    font-weight: 700;
+}
+
+.header-small-size {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: bold;
+}
+
+.large-header-size {
+    color: var(--color-900);
+    font-size: 6rem;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 850px) {
+    .text-size {
+        font-size: 17px;
+        line-height: 23px;
+        font-weight: 600;
+    }
+
+    .header-size {
+        font-size: 26px;
+        line-height: 26px;
+        font-weight: 700;
+    }
+
+    .header-small-size {
+        font-size: 14px;
+        line-height: 14px;
+        font-weight: bold;
+    }
+
+    .large-header-size {
+        font-size: 25px;
+        line-height: 30px;
+    }
+}
+
+/* Tailwind like classes */
+
+.bg-900 {
+    background-color: var(--color-900);
+}
+
+.color-900 {
+    color: var(--color-900);
+}
+
+.color-accent {
+    color: var(--color-accent-1);
+}
+
+.bg-accent {
+    background-color: var(--color-accent-1);
+}
+
+.border-accent {
+    border-color: var(--color-accent-1);
+}
+
+.bg-accent2 {
+    background-color: var(--color-accent-2);
+}
+
+.color-100 {
+    color: var(--color-100);
+}
+
+.bg-100 {
+    background-color: var(--color-100);
+}
+
+.border-100 {
+    border-color: var(--color-100);
+}
+
+.border-6 {
+    border-width: 6px;
+}
+
+.border-3 {
+    border-width: 3px;
+}
+
+.rounded-4xl {
+    border-radius: 32px;
+}
+
+/* Home */
+
+.h-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    transition: 0.5s;
+}
+
+.h-slide-part {
+    position: relative;
+    flex: 1;
+}
+
+.container-solid-shadow {
+    box-shadow: 30px 30px 0px 5px var(--color-100);
+}
+
+.shadow { 
+    box-shadow: 7px 7px 0px 1px var(--color-100);
+}
+
+@media screen and (max-width: 850px) {
+    .shadow { 
+        box-shadow: 6px 6px 0px 0.5px var(--color-100);
+    }
+}
+
+/* Animations */
+
+/* Fade */
+.fade-enter-active, .fade-leave-active { transition: 0.5s; }
+.fade-enter-from, .fade-leave-to  { opacity: 0; }
+.fade-enter-to, .fade-leave-from { opacity: 1; }
+
+/* Slide in */
+.slide-in-enter-active, .slide-in-leave-active { transition: 0.5s; }
+.slide-in-enter-from { left: 100%; }
+.slide-in-enter-to { left: 0%; }
+.slide-in-leave-from { left: 0%; }
+.slide-in-leave-to { left: -100%; }
+
+/* Slide out */
+.slide-out-enter-active, .slide-out-leave-active { transition: 0.5s; }
+.slide-out-enter-from { left: -100%; }
+.slide-out-enter-to { left: 0%; }
+.slide-out-leave-from { left: 0%; }
+.slide-out-leave-to { left: 100%; }
+
+/* Selection */
+
+::selection {
+    color: var(--color-100);
+    background: var(--color-accent-1);
+}
+
+/* Scroll bar */
+
+.hide-scroll::-webkit-scrollbar {
+    width: 0px;
+}

@@ -5,28 +5,28 @@
 
     <!-- Other -->
     <meta charset="UTF-8">
-    <link rel="canonical" href="" /> <!-- Add canonical -->
+    <link rel="canonical" href="wiki.valentin-lelievre.com" />
 
     <!-- Description and cover -->
     <meta name='description' content="">
     <meta name='keywords' content=''>
     <meta name="image" content=''>
-    <meta name='author' content=''> <!-- Add description keywords and authors -->
+    <meta name='author' content='Valentin Le Lièvre and Adrien Gasquet'> <!-- Add description, keywords -->
 
     <!-- Icon -->
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="192x192" href="/img/icons/favicon.png"> <!-- Add correct icons size -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/icons/apple-touch-icon.png"> <!-- Create correct icon -->
-    <link rel="mask-icon" href="/img/icons/safari-pinned-tab.svg" color="#49b583"> <!-- Create icon and change color -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+    <link rel="mask-icon" href="/favicon.ico" color="#AE8BBF">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="WikiChallenge">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#0b0e11"> <!-- Change color -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#AE8BBF">
     
     <!-- Theme -->
-    <meta name="theme-color" content="#0b0e11"> <!-- Change color -->
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#dee3ea"> <!-- Change color -->
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0e11"> <!-- Change color -->
+    <meta name="theme-color" content="#AE8BBF">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#AE8BBF">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#AE8BBF">
 
     <!-- Mobile friendly -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,11 +34,22 @@
     <meta name="MobileOptimized" content="375">
     
     <!-- Script and CSS wil be auto injected -->
-    <link rel="stylesheet" href="/src/assets/font/Poppins/font.css">
+    <link rel="stylesheet" href="/font/Poppins/font.css">
     <!-- <link rel='manifest' href='manifest.json'> --> <!-- Create manifest to support PWA -->
 </head>
-<body id="app" class="bg-900 absolute w-full h-full overflow-x-hidden">
+<body id="app" class="absolute w-full h-full overflow-hidden">
     <!-- JS script -->
     <script type="module" src="/src/main.ts"></script>
+
+    <script>
+        // Function to open and close wikipedia content section on mobile
+        function mfTempOpenSection(sectionId) {
+            if(document.getElementById('mf-section-' + sectionId).style.height != "unset") {
+                document.getElementById('mf-section-' + sectionId).style.height = "unset";
+            } else {
+                document.getElementById('mf-section-' + sectionId).style.height = "0px";
+            }
+        }
+    </script>
 </body>
 </html>

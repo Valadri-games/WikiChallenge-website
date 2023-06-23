@@ -1,0 +1,49 @@
+<template>
+    <div class="absolute w-full h-full top-0 duration-500 bg-accent z-30 -left-full" :class="{ 'left-0': hamburgerChecked }">
+        <div class="absolute top-1/2 -translate-y-1/2 h-2/3 w-full flex flex-col justify-around pl-10 pr-10">
+            <router-link to="/" class="link color-900" :class="{ 'color-100': $route.name == 'homeSlide1' }"> VALADRI GAMES </router-link>
+            <router-link to="" class="link color-900" :class="{ 'color-100': $route.name == '' }"> TWITTER </router-link>
+            <router-link to="/settings/privacy" class="link color-900" :class="{ 'color-100': $route.name == 'privacyInformations' }"> UTILISATION DES DONNEES </router-link>
+            <router-link to="" class="link color-900" :class="{ 'color-100': $route.name == '' }"> CONDITIONS D'UTILISATION </router-link>
+        </div>
+
+        <!-- Account -->
+        <!-- <div class="absolute left-0 top-full -translate-y-full w-full pl-6 pr-6 pb-4">
+            <div class="flex flex-row bg-accent2 rounded-full p-2 pr-5 items-center">
+                <div class="flex-1 flex-row flex gap-4 items-center">
+                    <Avatar :big="true" :shadow="false" :avatarID=avatarID class="w-16 h-16" />
+                    <Text> VLTN </Text>
+                </div>
+
+                <hr class="rotate-90 bg-100 w-10 h-1 border-none" />
+
+                <div class="flex-row flex items-center">
+                    <Text class="whitespace-nowrap"> Score total: 50 000 </Text>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</template>
+
+<script setup lang="ts">
+    import { storeToRefs } from 'pinia';
+    import { RouterLink } from 'vue-router';
+
+    import { useGeneralStore } from '@/stores/general';
+
+    import Text from '@/ui/text/Text.vue';
+
+    import Avatar from '@/components/avatar/Avatar.vue';
+
+    const { hamburgerChecked, avatarID } = storeToRefs(useGeneralStore());
+</script>
+
+<style scoped>
+    .link {
+        text-align: center;
+        font-size: 2.5rem;
+        line-height: 2.75rem;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
