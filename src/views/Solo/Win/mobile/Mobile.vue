@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-full -mt-10 flex flex-col gap-6 duration-500" :class="{ 'opacity-0': !animationStep4 }">
+            <div class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-full -mt-8 flex flex-col gap-6 duration-500" :class="{ 'opacity-0': !animationStep4 }">
                 <ButtonClassic @click="router.go(-1)" :secondOption="true">Lire&nbsp;la&nbsp;page</ButtonClassic>
                 <ButtonClassic @click="showPath = true">Voir&nbsp;mon&nbsp;parcours</ButtonClassic>
             </div>
@@ -114,7 +114,13 @@
                     </div>
                 </div>
 
-                <ButtonClassic class="mt-16 mb-10" @click="finish"> Continuer </ButtonClassic>
+                <div class="relative w-full flex justify-center mt-16 mb-10">
+                    <ButtonClassic class="max-w-fit" @click="finish"> Continuer </ButtonClassic>
+
+                    <router-link to="/settings/account/create" v-if="!loggedIn">
+                        <ButtonRounded class="absolute left-full -translate-x-full -ml-4 min-w-max !p-2.5"> <img class="h-10 w-10" src="@/assets/icons/save.svg" /> </ButtonRounded>
+                    </router-link>
+                </div>  
             </div>
         </div>
     </div>
@@ -139,6 +145,7 @@
     import Text from '@/ui/text/Text.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
+    import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
 
     const animationStep0 = ref(false);
     const animationStep1 = ref(false);
@@ -146,7 +153,7 @@
     const animationStep3 = ref(false);
     const animationStep4 = ref(false);
 
-    const { avatarID } = storeToRefs(useGeneralStore());
+    const { avatarID, loggedIn } = storeToRefs(useGeneralStore());
 
     const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score } = storeToRefs(useSoloModeStore());
 

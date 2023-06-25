@@ -33,15 +33,17 @@
             </div>
         </div>
 
-        <Text class="mt-10 ml-6"> Définition de la page finale </Text>
+        <div class="flex-1 flex flex-col mb-32 w-full overflow-hidden mt-10">
+            <div class="bg-100 ml-6 mr-6 rounded-3xl">
+                <Text class="ml-4 color-900 text-white mt-3"> Définition de la page finale </Text>
 
-        <div class="flex-1 flex flex-col mb-32 w-full overflow-hidden mt-2">
-            <div class="flex-1 flex flex-col border-4 border-100 p-4 ml-6 mr-6 rounded-3xl">
-                <Text class="flex-1 text !text-xl">
-                    {{ endPageSummary }}
-                </Text>
+                <div class="flex-1 flex flex-col border-4 border-100 p-4 rounded-3xl bg-900">
+                    <Text class="flex-1 text !text-xl">
+                        {{ endPageSummary }}
+                    </Text>
 
-                <SmallHeader class="!text-2xl text-center mt-3 cursor-pointer" @click="showModal = true"> VOIR PLUS </SmallHeader>
+                    <SmallHeader class="!text-2xl text-center mt-3 cursor-pointer" @click="showModal = true"> VOIR PLUS </SmallHeader>
+                </div>
             </div>
         </div>
 
@@ -103,6 +105,9 @@
 </script>
 
 <style scoped>
+    .text-white {
+        color: var(--color-900) !important;
+    }
     .text {
         display: -webkit-box;
         -webkit-line-clamp: 9;

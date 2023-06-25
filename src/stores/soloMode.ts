@@ -1,6 +1,7 @@
 import Utils from "@/static/utils";
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
+import { useGeneralStore } from "./general";
 
 export const useSoloModeStore = defineStore('soloMode', () => {
     // Create auto subscription to changes in order to save changes into the local storage
@@ -40,9 +41,14 @@ export const useSoloModeStore = defineStore('soloMode', () => {
 
     function win() {
         totalTime.value = Utils.calcGameTime(gameTimerPauses.value);
-
-        console.log('test win')
         score.value = Math.trunc((1 / steps.value) * 1500) + Math.trunc((1 / (totalTime.value / 1000)) * 1000);
+
+        let generalStore = useGeneralStore();
+        generalStore.accountScore += score.value;
+        generalStore.gamePlayed += 1;
+
+        generalStore.todayStats.gamePlayed += 1;
+        generalStore.todayStats.score += score.value;;
     }
 
     function reset() {

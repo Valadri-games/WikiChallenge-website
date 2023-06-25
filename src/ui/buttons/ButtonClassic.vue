@@ -1,5 +1,5 @@
 <template>
-    <div class="button shadow" :class="{ 'bg-900': secondOption, 'bg-accent': !secondOption }">
+    <div class="button shadow" :class="{ 'bg-900': secondOption, 'bg-accent': !secondOption, 'small-paddings': smallPad }">
         <p class="text-center color-100 text-size pointer-events-none"><slot></slot></p>
     </div>
 </template>
@@ -7,6 +7,12 @@
 <script setup lang="ts">
     defineProps({
         secondOption: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+
+        smallPad: {
             type: Boolean,
             required: false,
             default: false,
@@ -23,6 +29,11 @@
         padding-right: 8rem;
         cursor: pointer;
         user-select: none;
+    }
+
+    .small-paddings {
+        padding-left: 6rem !important;
+        padding-right: 6rem !important;
     }
 
     .button:active {
@@ -45,6 +56,11 @@
         .button:active {
             box-shadow: 2px 2px 0px 1px var(--color-100);
             transform: translateY(2px);
+        }
+
+        .small-paddings {
+            padding-left: 4rem !important;
+            padding-right: 4rem !important;
         }
     }
 </style>

@@ -15,6 +15,14 @@
                 </transition>
                 <!-- Back arrow start -->
 
+                <!-- Forward arrow start -->
+                <transition name="arrow-fade">
+                    <div v-if="homeFormStep < 0" @click="router.go(-1)" class="absolute top-0 left-full -translate-x-full min-h-fit -ml-6 mt-3 z-20 cursor-pointer">
+                        <img class="h-10 w-10 min-w-max" src="@/assets/icons/forward-arrow.svg" />
+                    </div>
+                </transition>
+                <!-- Forward arrow start -->
+
                 <router-view v-slot="{ Component, route }" class="absolute w-full h-full">
                     <transition :name=route.meta.useTransition>
                         <component @seeRules="seeRules = true" :is=Component />
@@ -24,12 +32,14 @@
             <!-- Slide container horizontal end -->
 
             <!-- Current slide indicator start -->
-            <div class="flex justify-center" v-if="!proposeRestore">
-                <div class="relative flex flex-row gap-4">
-                    <div v-for="i in 3" class="h-3 w-3 rounded-full bg-accent"></div>
-                    <div :style="{ 'left': ((homeFormStep - 1) * 19) + 'px' }" class="absolute left-0 bg-100 h-3 w-3 rounded-full duration-500"></div>
+            <transition name="fade">
+                <div class="flex justify-center" v-if="!proposeRestore && homeFormStep > -1">
+                    <div class="relative flex flex-row gap-4">
+                        <div v-for="i in 3" class="h-3 w-3 rounded-full bg-accent"></div>
+                        <div :style="{ 'left': ((homeFormStep - 1) * 19) + 'px' }" class="absolute left-0 bg-100 h-3 w-3 rounded-full duration-500"></div>
+                    </div>
                 </div>
-            </div>
+            </transition>
             <!-- Current slide indicator end -->
         </div>
 
@@ -40,7 +50,7 @@
             </div>
 
             <Text class="text-center mt-8">
-                Voyage à travers Wikipedia d'une page de départ à une page d'arrivée en utilisant que les liens de redirections.
+                Voyage à travers Wikipedia d'une page de départ à une page d'arrivée en n'utilisant que les liens de redirections.
                 <br /><br /><br />
                 Joues avec tes amis dans un salon privé et découvre les différents modes de jeux&nbsp;!
                 <br /><br /><br />
@@ -57,14 +67,16 @@
     </div>
 
     <!-- Account -->
-    <!-- <div class="absolute left-0 top-full -translate-y-full w-full pl-6 pr-6 pb-4">
-        <router-link to="/settings/account/create">
-            <div class="flex flex-row gap-3 bg-accent2 rounded-full p-3 items-center justify-center cursor-pointer">
-                <img class="h-10 w-10" src="@/assets/icons/account.svg" />
-                <Header> Crée un compte </Header>
-            </div>
-        </router-link>
-    </div> -->
+    <transition name="fade">
+        <div v-if="!loggedIn && !proposeRestore && homeFormStep > -1" class="absolute left-0 top-full -translate-y-full w-full flex justify-center pb-4">
+            <router-link to="/account-infos">
+                <ButtonContent :secondOption="true" class="flex flex-row gap-3 items-center max-w-max !pl-6 !pr-6">
+                    <img class="h-10 w-10" src="@/assets/icons/account.svg" />
+                    <Header> Crée un compte </Header>
+                </ButtonContent>
+            </router-link>
+        </div>
+    </transition>
 </template>
 
 <script setup lang="ts">
@@ -78,9 +90,9 @@
     import ButtonContent from '@/ui/buttons/ButtonContent.vue';
     import Text from '@/ui/text/Text.vue';
     import Header from '@/ui/text/Text.vue';
-import LargeHeader from '@/ui/text/LargeHeader.vue';
+    import LargeHeader from '@/ui/text/LargeHeader.vue';
 
-    const { homeFormStep, proposeRestore } = storeToRefs(useGeneralStore());
+    const { homeFormStep, proposeRestore, loggedIn } = storeToRefs(useGeneralStore());
 
     const seeRules = ref(false);
 </script>

@@ -1,12 +1,21 @@
 <template>
-    <div class="button shadow">
+    <div class="button shadow" :class="{ 'bg-900': secondOption, 'bg-accent': !secondOption }">
         <slot></slot>
     </div>
 </template>
 
+<script setup lang="ts">
+    defineProps({
+        secondOption: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
+    });
+</script>
+
 <style scoped>
     .button {
-        background-color: var(--color-accent-1);
         border: 6px solid var(--color-100);
         border-radius: 9999px;
         padding: 1.25rem;

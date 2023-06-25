@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z" fill="none" stroke="#62506D" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/><path d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z" fill="none" stroke="#62506D" stroke-miterlimit="10" stroke-width="50"/></svg>
+<svg width="21" height="25" viewBox="0 0 21 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="Shirt" d="M0.327423 21.1248C1.89243 17.0474 5.85493 14.1519 10.4959 14.1519C15.145 14.1519 19.1132 17.0575 20.6726 21.1462C17.9721 23.5434 14.4127 25 10.5121 25C6.59976 25 3.0308 23.5347 0.327423 21.1248Z" fill="#62506D"/>
+<circle id="Ellipse 52" cx="11" cy="8.46664" r="6.99265" fill="#62506D" stroke="#F4F4F4" stroke-width="1.98529"/>
+<defs>
+<clipPath id="clip0_6_75">
+<rect width="390" height="844" fill="transparent" transform="translate(-90 -769)"/>
+</clipPath>
+</defs>
+</svg>

@@ -3,7 +3,7 @@
         <input id="top-menu-hamburger" type="checkbox" class="hidden" v-model="hamburgerChecked" />
         
         <label class="cursor-pointer" id="menu-label" for="top-menu-hamburger">
-            <div v-for="i in 3" :key=i class="h-1.5 w-12 rounded-full duration-300" :class="{ 'mt-2': i != 0 }" :style="{ 'background-color': (['homeSlide1', 'homeSlide2', 'homeSlide3', 'restoreSlide', 'gameModeSelection'].includes($route.name as string) || hamburgerChecked) ? 'var(--color-900)' : 'var(--color-100)' }"></div>
+            <div v-for="i in 3" :key=i class="h-1.5 w-12 rounded-full duration-300" :class="{ 'mt-2': i != 0 }" :style="{ 'background-color': (['homeSlide1', 'homeSlide2', 'homeSlide3', 'restoreSlide', 'gameModeSelection', 'accountInfosSlide', 'createAccountSlide', 'loginSlide'].includes($route.name as string) || hamburgerChecked) ? 'var(--color-900)' : 'var(--color-100)' }"></div>
         </label>
     </div>
 </template>

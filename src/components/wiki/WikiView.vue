@@ -61,17 +61,8 @@
         gameTimerPauses.value.push(Date.now());
 
         clics += 1;
-        if(endPage.value == currentPage.value || (window.location.hostname == "localhost" && clics == 4)) {
-            gameStarted.value = false;
-            gameEnded.value = true;
-
-            pagesPath.value.push(endPage.value);
-            gameTimerPauses.value.push(Date.now());
-
-            soloModeStore.win();
-
-            emit('win');
-        } else emit('loaded');
+        if(endPage.value == currentPage.value || (window.location.hostname == "localhost" && clics == 4)) win();
+        else emit('loaded');
     }
 
     function parseWikiData(data: any) {
@@ -95,6 +86,18 @@
 
         emit('pageNotFound');
         loadPageContent(currentPage.value);
+    }
+
+    function win() {
+        gameStarted.value = false;
+        gameEnded.value = true;
+
+        pagesPath.value.push(endPage.value);
+        gameTimerPauses.value.push(Date.now());
+
+        soloModeStore.win();
+
+        emit('win');
     }
 
     onMounted(() => {

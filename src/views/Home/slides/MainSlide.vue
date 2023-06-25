@@ -46,28 +46,57 @@
 
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
-            <div class="relative w-full flex justify-center mt-4">
-                <Avatar :avatarID=avatarID class="h-[190px] w-[190px]" />
+            <div v-if="!loggedIn">
+                <div class="relative w-full flex justify-center mt-4">
+                    <Avatar :avatarID=avatarID class="h-[190px] w-[190px]" />
 
-                <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
-                    <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
-                </ButtonRounded>
+                    <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
+                        <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
+                    </ButtonRounded>
+                </div>
+
+                <Text class="text-center mt-14"> Choisis un pseudo </Text>
+
+                <div class="relative w-full pr-3 mt-4 flex justify-center">
+                    <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                    <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
+                </div>
+
+                <div class="mt-8 flex justify-center">
+                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
+                </div>
+
+                <div class="mt-20 cursor-pointer flex flex-row justify-center items-center gap-2" @click="$emit('seeRules')">
+                    <img class="h-10 w-10 -mt-1 border-3 border-100 rounded-full" src="@/assets/icons/information.svg" />
+                    <SmallHeader class="text-center -mt-2"> DECOUVRIR LE PRINCIPE </SmallHeader>
+                </div>
             </div>
 
-            <Text class="text-center mt-14"> Choisis un pseudo </Text>
+            <div v-if="loggedIn">
+                <router-link to="/settings/account">
+                    <div class="bg-accent2 flex flex-row gap-10 items-center rounded-3xl p-6">
+                        <Avatar :avatarID=avatarID :shadow="false" :big="true" class="h-[80px] w-[80px]" />
 
-            <div class="relative w-full pr-3 mt-4 flex justify-center">
-                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
-                <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
-            </div>
+                        <Text class="flex-1"> {{ playerName }} </Text>
+                    </div>
+                </router-link>
 
-            <div class="mt-8 flex justify-center">
-                <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
-            </div>
+                <div class="bg-accent2 flex flex-col mt-4 items-center rounded-3xl p-6">
+                    <Text class="flex-1"> Tu n'as pas participé au défis du jour ! </Text>
 
-            <div class="mt-20 cursor-pointer flex flex-row justify-center items-center gap-2" @click="$emit('seeRules')">
-                <img class="h-10 w-10 -mt-1 border-3 border-100 rounded-full" src="@/assets/icons/information.svg" />
-                <SmallHeader class="text-center -mt-2"> DECOUVRIR LE PRINCIPE </SmallHeader>
+                    <div class="mt-4 flex justify-center">
+                        <ButtonClassic> Participer </ButtonClassic>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-col justify-center items-center gap-2">
+                    <Text class="flex-1"> Parties joué aujourd'hui: {{ todayStats.gamePlayed }} </Text>
+                    <Text class="flex-1"> Score total du jour: {{ todayStats.score }} </Text>
+                </div>
+
+                <div class="mt-28 flex justify-center">
+                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
+                </div>
             </div>
         </div>
     </div>
@@ -88,7 +117,7 @@
     import Text from '@/ui/text/Text.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { homeFormStep, avatarID, playerName, showMobile, avatarCount } = storeToRefs(useGeneralStore());
+    const { homeFormStep, avatarID, playerName, showMobile, avatarCount, loggedIn, todayStats, minimumToRestore } = storeToRefs(useGeneralStore());
 
     const displayInputWarning = ref(false);
 
@@ -119,6 +148,8 @@
     }
 
     onMounted(() => {
+        minimumToRestore.value = false;
+
         homeFormStep.value = 1;
         pushState();
     });

@@ -39,9 +39,9 @@
 
         <Text class="text-center mt-6 !font-bold"> OU </Text>
 
-        <div class="mb-36 pointer-events-none opacity-50">
-            <div class="ml-6 mr-6 rounded-2xl mt-6 flex overflow-hidden bg-accent">
-                <div class="list-element border-accent max-h-fit" @click="gameMode = 5" :class="{ 'border-100': gameMode == 5, 'opacity-80': gameMode != 5 }">
+        <div class="mb-36 pointer-events- opacity-">
+            <div class="ml-6 mr-6 rounded-3xl mt-6 flex overflow-hidden bg-accent">
+                <div class="list-element border-accent max-h-fit opacity-80" @click="gameMode = 5" :class="{ 'border-100': gameMode == 5, 'opacity-80': gameMode != 5 }">
                     <Text class="!font-bold"> DEFI QUOTIDIEN </Text>
                     <Text class="mt-1"> Découvre le défis quotidien et réalise la meilleure performance </Text>
                 </div>
@@ -94,9 +94,9 @@
 
 <style scoped>
     .list-element {
-        padding: 0.75rem;
+        padding: 0.80rem;
         background-color: var(--color-900);
-        border-radius: 1rem;
+        border-radius: 1.5rem;
         border-width: 4px;
         transition: 300ms;
     }

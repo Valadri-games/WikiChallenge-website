@@ -6,11 +6,14 @@ import Home from "@/views/Home/Home.vue";
 import MainSlide from "@/views/Home/slides/MainSlide.vue";
 import ModeSlide from "@/views/Home/slides/ModeSlide.vue";
 import Mode2Slide from "@/views/Home/slides/MultiplayerSlide.vue";
+import CreateAccountSlide from "@/views/Home/slides/CreateAccount.vue";
+import AccountInfosSlide from "@/views/Home/slides/AccountInfos.vue";
+import LoginSlide from "@/views/Home/slides/Login.vue";
 import RestoreSessionSlide from "@/views/Home/slides/RestoreSessionSlide.vue";
 
 import Solo from "@/views/Solo/Solo.vue";
 import GameMode from "@/views/Solo/GameMode/GameMode.vue";
-import Loader from "@/views/Solo/Loader/Loader.vue";
+import Loader from "@/views/Loader/Loader.vue";
 import Lobby from "@/views/Solo/Lobby/Lobby.vue";
 import Game from "@/views/Solo/Game/Game.vue";
 import Win from "@/views/Solo/Win/Win.vue";
@@ -21,6 +24,7 @@ import Privacy from "@/views/Settings/Privacy/Privacy.vue";
 import Account from "@/views/Settings/Account/Account.vue";
 import AccountInfos from "@/views/Settings/Account/AccountInfos/AccountInfos.vue";
 import CreateAccount from "@/views/Settings/Account/CreateAccount/CreateAccount.vue";
+import Login from "@/views/Settings/Account/Login/Login.vue";
 
 let firstLoad = true;
 let firstLoadAnimation = false;
@@ -68,6 +72,36 @@ const router = createRouter({
                     name: "homeSlide3",
                     meta: {
                         depth: 2,
+                        transitionName: "slide"
+                    }
+                },
+
+                {
+                    path: "account-infos",
+                    component: AccountInfosSlide,
+                    name: "accountInfosSlide",
+                    meta: {
+                        depth: -1,
+                        transitionName: "slide"
+                    }
+                },
+
+                {
+                    path: "create-account",
+                    component: CreateAccountSlide,
+                    name: "createAccountSlide",
+                    meta: {
+                        depth: -2,
+                        transitionName: "slide"
+                    }
+                },
+
+                {
+                    path: "login",
+                    component: LoginSlide,
+                    name: "loginSlide",
+                    meta: {
+                        depth: -2,
                         transitionName: "slide"
                     }
                 },
@@ -185,6 +219,26 @@ const router = createRouter({
                                 transitionName: "fade"
                             }
                         },
+
+                        {
+                            path: "login",
+                            component: Login,
+                            name: "login",
+                            meta: {
+                                depth: 0,
+                                transitionName: "fade"
+                            }
+                        },
+
+                        {
+                            path: "loading",
+                            component: Loader,
+                            name: "accountManagementLoader",
+                            meta: {
+                                depth: 0,
+                                transitionName: "fade"
+                            }
+                        },
                     ],
                     meta: {
                         depth: 0,
@@ -208,8 +262,7 @@ const router = createRouter({
                 if(to.fullPath != "/restore") {
                     router.replace({ path: '/restore' });
                 }
-            }
-            else router.replace({ path: '/' });
+            } else router.replace({ path: '/' });
         }
 
         useGeneralStore().hamburgerChecked = false;

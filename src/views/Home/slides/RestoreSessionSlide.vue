@@ -17,8 +17,8 @@
             </Text>
 
             <div class="mt-12 pr-3 flex flex-col gap-5">
+                <ButtonClassic :second-option="true" @click=generalStore.reset> Recommencer </ButtonClassic>
                 <ButtonClassic @click=generalStore.restore> Reprendre </ButtonClassic>
-                <ButtonClassic @click=generalStore.reset> Recommencer </ButtonClassic>
             </div>
         </div>
     </div>
