@@ -10,8 +10,8 @@ export default class SoloMode {
         const soloModeStore = useSoloModeStore();
 
         if(socket.connected != true) {
-            router.go(-1);
             soloModeStore.showError = true;
+            return router.go(-1);
         }
 
         const generalStore = useGeneralStore();
@@ -21,14 +21,14 @@ export default class SoloMode {
 
         let result = await SoloMode.getStartPage();
         if(result == false) {
-            router.go(-1);
             soloModeStore.showError = true;
+            return router.go(-1);
         }
 
         result = await SoloMode.getEndPage();
         if(result == false) {
-            router.go(-1);
             soloModeStore.showError = true;
+            return router.go(-1);
         }
 
         generalStore.loading = false;
@@ -39,19 +39,24 @@ export default class SoloMode {
         const soloModeStore = useSoloModeStore();
 
         return new Promise((resolve) => {
+            let timeoutId = setTimeout(() => {
+                socket.off('getStartPage');
+                resolve(false);
+            }, 5000); // Set 5000
+
             socket.on("getStartPage", (data) => {
+                clearTimeout(timeoutId);
+                socket.off('getStartPage');
+
+                if(data == false || data == "false")  return resolve(false);
+
                 soloModeStore.startPage = data.title;
                 soloModeStore.currentPage = data.title;
 
-                socket.off('getStartPage');
                 resolve(true);
             });
     
             socket.emit('getStartPage', SoloMode.generateDifficultyLevel(soloModeStore));
-
-            setTimeout(() => {
-                resolve(false);
-            }, 5000); // Set 5000
         });
     }
 
@@ -59,25 +64,27 @@ export default class SoloMode {
         const soloModeStore = useSoloModeStore();
 
         return new Promise((resolve) => {
+            let timeoutId =  setTimeout(() => {
+                socket.off('getEndPage');
+                resolve(false);
+            }, 5000); // Set 5000
+
             socket.on("getEndPage", async (data) => {
+                clearTimeout(timeoutId);
+                socket.off('getEndPage');
+
+                if(data == false || data == "false") return resolve(false);
+
                 let endPageSummary = await SoloMode.getEndPageSummary(data.title);
-                if(endPageSummary == false) {
-                    router.go(-1);
-                    soloModeStore.showError = true;
-                }
+                if(endPageSummary == false) return resolve(false);
 
                 soloModeStore.endPage = data.title;
                 soloModeStore.endPageSummary = endPageSummary;
 
-                socket.off('getEndPage');
                 resolve(true);
             });
     
             socket.emit('getEndPage', SoloMode.generateDifficultyLevel(soloModeStore));
-
-            setTimeout(() => {
-                resolve(false);
-            }, 5000); // Set 5000
         });
     }
 
@@ -106,24 +113,24 @@ export default class SoloMode {
         let level = soloModeStore.gameMode;
 
         if(level == 1) {
-            interestLow = 85;
+            interestLow = 90;
             interestHigh = 100;
             difficultyLow = 0;
-            difficultyHigh = 2;
+            difficultyHigh = 1;
         }
 
         if(level == 2) {
-            interestLow = 60;
+            interestLow = 75;
             interestHigh = 100;
             difficultyLow = 1;
             difficultyHigh = 3;
         }
 
         if(level == 3) {
-            interestLow = 20;
+            interestLow = 50;
             interestHigh = 100;
-            difficultyLow = 7;
-            difficultyHigh = 10;
+            difficultyLow = 4;
+            difficultyHigh = 7;
         }
 
         if(level == 4) {

@@ -4,20 +4,22 @@ import router from "@/router/router";
 
 import Utils from "@/static/utils";
 import { useSoloModeStore } from "./soloMode";
-import { socket } from "@/socket";
+import { socket, socketState } from "@/socket";
 
 export const useGeneralStore = defineStore('general', () => {
     // Create auto subscription to changes in order to save changes into the local storage
     useGeneralStore().$subscribe((mutation, state) => {
         localStorage.setItem('wikichallenge-data', JSON.stringify(state));
 
-        socket.emit('saveUserData', {
-            accountScore: accountScore.value,
-            gamePlayed: gamePlayed.value,
-            avatarID: avatarID.value,
-            sessionId: sessionId.value,
-            name: playerName.value,
-        });
+        if(socketState.connected && loggedIn.value == true) {
+            socket.emit('saveUserData', {
+                accountScore: accountScore.value,
+                gamePlayed: gamePlayed.value,
+                avatarID: avatarID.value,
+                sessionId: sessionId.value,
+                name: playerName.value,
+            });
+        }
     });
 
     // Retrive the user data from local store
@@ -32,7 +34,6 @@ export const useGeneralStore = defineStore('general', () => {
     });
 
     /* Loading and error display */
-
     const loading = ref(false);
     const showLoginError = ref(false);
     const showPasswordError = ref(false);
@@ -45,13 +46,8 @@ export const useGeneralStore = defineStore('general', () => {
     /* Server connectivity */
     const internetAvailable: Ref<boolean> = ref(true);
 
-    window.addEventListener('online', () => {
-        internetAvailable.value = true;
-    });
-
-    window.addEventListener('offline', () => {
-        internetAvailable.value = false;
-    });
+    window.addEventListener('online', () => { internetAvailable.value = true; });
+    window.addEventListener('offline', () => { internetAvailable.value = false; });
 
     /* Account */
 
@@ -73,7 +69,7 @@ export const useGeneralStore = defineStore('general', () => {
 
     /* Today stats */
 
-    let date = new Date();
+    let date = new Date(); // -----> Change with the new database storing system
     const todayStats = ref({
         date: date.getDate(),
         month: date.getMonth(),
@@ -96,13 +92,10 @@ export const useGeneralStore = defineStore('general', () => {
     const showMobile = ref(isUserMobile());
 
     function isUserMobile() {
-        if(document.documentElement.clientWidth < 850) return true;
-        return false;
+        return (document.documentElement.clientWidth < 850 ? true : false);
     }
-
-    window.addEventListener('resize', () => {
-        showMobile.value = isUserMobile();
-    });
+    
+    window.addEventListener('resize', () => { showMobile.value = isUserMobile(); });
 
     /* Reset and restore */
 
@@ -131,8 +124,6 @@ export const useGeneralStore = defineStore('general', () => {
     /* Account data */
 
     function loadAccountData(data: any) {
-        console.log(data)
-
         accountScore.value = data.score;
         avatarID.value = data.avatarid;
         gamePlayed.value = data.gameplayed;

@@ -23,8 +23,7 @@ import Privacy from "@/views/Settings/Privacy/Privacy.vue";
 
 import Account from "@/views/Settings/Account/Account.vue";
 import AccountInfos from "@/views/Settings/Account/AccountInfos/AccountInfos.vue";
-import CreateAccount from "@/views/Settings/Account/CreateAccount/CreateAccount.vue";
-import Login from "@/views/Settings/Account/Login/Login.vue";
+import AccountSettings from "@/views/Settings/Account/AccountSettings/AccountSettings.vue";
 
 let firstLoad = true;
 let firstLoadAnimation = false;
@@ -211,19 +210,9 @@ const router = createRouter({
                         },
 
                         {
-                            path: "create",
-                            component: CreateAccount,
-                            name: "createAccount",
-                            meta: {
-                                depth: 0,
-                                transitionName: "fade"
-                            }
-                        },
-
-                        {
-                            path: "login",
-                            component: Login,
-                            name: "login",
+                            path: "edit",
+                            component: AccountSettings,
+                            name: "accountSettings",
                             meta: {
                                 depth: 0,
                                 transitionName: "fade"
@@ -270,7 +259,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-    if(to.path.includes("loading") && useGeneralStore().loading == false) {
+    let generalStore = useGeneralStore();
+
+    if(to.path.includes("loading") && generalStore.loading == false) {
+        router.replace({ path: '/' });
+    }
+
+    if(to.path.includes("account") && generalStore.loggedIn == false) {
         router.replace({ path: '/' });
     }
 });

@@ -46,6 +46,7 @@
 
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
+            <!-- New user --> 
             <div v-if="!loggedIn">
                 <div class="relative w-full flex justify-center mt-4">
                     <Avatar :avatarID=avatarID class="h-[190px] w-[190px]" />
@@ -63,7 +64,7 @@
                 </div>
 
                 <div class="mt-8 flex justify-center">
-                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
+                    <ButtonClassic @click=logoutPlayButtonClicked> Jouer </ButtonClassic>
                 </div>
 
                 <div class="mt-20 cursor-pointer flex flex-row justify-center items-center gap-2" @click="$emit('seeRules')">
@@ -72,32 +73,74 @@
                 </div>
             </div>
 
+            <!-- Logged in --> 
             <div v-if="loggedIn">
-                <router-link to="/settings/account">
-                    <div class="bg-accent2 flex flex-row gap-10 items-center rounded-3xl p-6">
-                        <Avatar :avatarID=avatarID :shadow="false" :big="true" class="h-[80px] w-[80px]" />
+                <div class="relative">
+                    <router-link to="/settings/account">
+                        <Avatar :avatarID=avatarID :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
 
-                        <Text class="flex-1"> {{ playerName }} </Text>
+                        <Text class="ml-6 mt-3 scale-110"> {{ playerName }} </Text>
+                        <Text class="ml-2 opacity-75"> Joue depuis {{ playSince }} </Text>
+                    </router-link>
+
+                    <router-link to="/settings/account/edit">
+                        <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1">
+                            <img class="h-11 w-11 min-w-fit" src="@/assets/icons/settings.svg" />
+                        </div>
+                    </router-link>
+                </div>
+
+                <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
+
+                <router-link to="/settings/account">
+                    <div class="flex flex-col relative">
+                        <Header> Statistiques </Header>
+
+                        <div class="flex flex-row mt-4 gap-4">
+                            <img src="@/assets/icons/clock.svg" />
+
+                            <div class="flex flex-col flex-1">
+                                <Text class="scale-110 ml-3"> {{ todayStats.gamePlayed }} </Text>
+                                <Text class="opacity-75"> Parties aujourd'hui </Text>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-row mt-4 gap-4">
+                            <img src="@/assets/icons/star.svg" />
+
+                            <div class="flex flex-col flex-1">
+                                <Text class="scale-110 ml-3"> {{ todayStats.score }} </Text>
+                                <Text class="opacity-75"> XP du jour </Text>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1">
+                            <img class="h-11 w-11 min-w-fit" src="@/assets/icons/stats.svg" />
+                        </div>
                     </div>
                 </router-link>
 
-                <div class="bg-accent2 flex flex-col mt-4 items-center rounded-3xl p-6">
-                    <Text class="flex-1"> Tu n'as pas participé au défis du jour ! </Text>
+                <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
 
-                    <div class="mt-4 flex justify-center">
-                        <ButtonClassic> Participer </ButtonClassic>
+                <!-- <router-link to="/settings/account"> -->
+                    <div class="flex flex-col relative opacity-50">
+                        <Header> Défi quotidien </Header>
+                        <Text class="mt-4 opacity-75 scale-90 -ml-4"> Il te reste 12h20 pour participer </Text>
+
+                        <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1">
+                            <img class="h-11 w-11 min-w-fit" src="@/assets/icons/play.svg" />
+                        </div>
                     </div>
-                </div>
+                <!-- </router-link> -->
 
-                <div class="mt-6 flex flex-col justify-center items-center gap-2">
-                    <Text class="flex-1"> Parties joué aujourd'hui: {{ todayStats.gamePlayed }} </Text>
-                    <Text class="flex-1"> Score total du jour: {{ todayStats.score }} </Text>
-                </div>
-
-                <div class="mt-28 flex justify-center">
+                <div class="mt-5 flex justify-center">
                     <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
                 </div>
             </div>
+
+            <Teleport to="body">
+                <NotConnected :show="showConnectionErrorPopup" @close="showConnectionErrorPopup = false"></NotConnected>
+            </Teleport>
         </div>
     </div>
 </template>
@@ -105,9 +148,14 @@
 <script setup lang="ts">
     import { onMounted, onUnmounted, ref } from 'vue';
     import { storeToRefs } from 'pinia';
+
     import router from '@/router/router';
 
+    import { socketConnected } from '@/socket';
+
     import { useGeneralStore } from '@/stores/general';
+
+    import NotConnected from '@/components/popup/NotConnected.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
@@ -115,11 +163,21 @@
     import Avatar from '@/components/avatar/Avatar.vue';
     
     import Text from '@/ui/text/Text.vue';
+    import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { homeFormStep, avatarID, playerName, showMobile, avatarCount, loggedIn, todayStats, minimumToRestore } = storeToRefs(useGeneralStore());
+    const { homeFormStep, avatarID, playerName, showMobile, avatarCount, loggedIn, todayStats, minimumToRestore, joinDate, internetAvailable } = storeToRefs(useGeneralStore());
 
     const displayInputWarning = ref(false);
+
+    const showConnectionErrorPopup = ref(false);
+
+    const playSince = ref("");
+    let d1 = new Date(joinDate.value);
+    let monthName = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin","Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    let m = d1.getMonth();
+    let y = d1.getFullYear();
+    playSince.value = monthName[m] + " " + y;
 
     function regenerateAvatar() {
         if(avatarID.value < avatarCount.value) avatarID.value += 1;
@@ -132,6 +190,11 @@
             displayInputWarning.value = false;
             router.push('/mode');
         }
+    }
+
+    function logoutPlayButtonClicked() {
+        if(internetAvailable.value && socketConnected.value) buttonClicked();
+        else showConnectionErrorPopup.value = true;
     }
 
     function writingInput() {

@@ -2,7 +2,9 @@
     <div>
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
-            <Text class="text-center mt-24">
+            <Header class="w-full text-center mt-3"> Inscrit-toi </Header>
+
+            <Text class="text-center mt-14">
                 Envie de devenir le meilleur en faisant grimper ton XP&nbsp;? 
                 D'obtenir des statistiques sur ton profil&nbsp;?
             </Text>
@@ -37,6 +39,7 @@
 
     import { useGeneralStore } from '@/stores/general';
 
+    import Header from '@/ui/text/Header.vue';
     import Text from '@/ui/text/Text.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';

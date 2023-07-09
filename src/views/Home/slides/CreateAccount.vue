@@ -33,7 +33,9 @@
             </Teleport>
 
             <Teleport to="body">
-                <NameAlreadyTaken :show="showUnavailableName" @close="showUnavailableName = false"></NameAlreadyTaken>
+                <ModalTextContent :button="'OK'" :title="'Pseudo indisponible'" :show="showUnavailableName" @close="showUnavailableName = false">
+                    Le pseudo que vous avez choisi n'est pas disponible. Veuillez en choisir un autre.
+                </ModalTextContent>
             </Teleport>
         </div>
     </div>
@@ -55,8 +57,8 @@
 
     import Avatar from '@/components/avatar/Avatar.vue';
 
-    import ServerError from '@/views/Home/mobile/modal/ServerError.vue';
-    import NameAlreadyTaken from '@/views/Home/mobile/modal/NameAlreadyTaken.vue';
+    import ServerError from '@/components/popup/ServerError.vue';
+    import ModalTextContent from '@/components/popup/BasicTextContent.vue';
 
     const { avatarID, playerName, avatarCount, homeFormStep, showMobile, showLoginError, showUnavailableName, loggedIn } = storeToRefs(useGeneralStore());
 

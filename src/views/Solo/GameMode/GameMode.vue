@@ -16,8 +16,8 @@
 
     import { useGeneralStore } from "@/stores/general";
 
-    import Mobile from "./mobile/Mobile.vue";
-    import Desktop from "./desktop/Desktop.vue";
+    import Mobile from "./Mobile.vue";
+    import Desktop from "./Desktop.vue";
 
     import DesktopMenuVue from "@/components/menu/DesktopMenu.vue";
     import HamburgerMenu from "@/components/menu/HamburgerMenu.vue";

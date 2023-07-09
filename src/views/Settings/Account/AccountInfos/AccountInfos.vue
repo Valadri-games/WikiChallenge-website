@@ -7,8 +7,6 @@
 
         <Mobile v-if="showMobile" />
         <!-- <Desktop v-if="!showMobile" /> -->
-
-        <p> account infos </p>
     </div>
 </template>
 
@@ -22,7 +20,7 @@
     import MobileMenuVue from "@/components/menu/MobileMenu.vue";
     import DesktopMenuVue from "@/components/menu/DesktopMenu.vue";
     // import Desktop from "./desktop/Desktop.vue";
-    import Mobile from "./mobile/Mobile.vue";
+    import Mobile from "./Mobile.vue";
 
     import HamburgerMenu from "@/components/menu/HamburgerMenu.vue";
 

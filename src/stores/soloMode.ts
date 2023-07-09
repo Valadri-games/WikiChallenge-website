@@ -70,6 +70,7 @@ export const useSoloModeStore = defineStore('soloMode', () => {
         steps.value = 0;
 
         totalTime.value = 0;
+        score.value = 0;
     }
 
     return {

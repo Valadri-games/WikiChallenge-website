@@ -52,9 +52,13 @@
         </div>
 
         <Teleport to="body">
-            <Modal :show="showModal" @close="showModal = false">
+            <ModalBigText :button="'Fermer'" :title="endPage.replaceAll('_', ' ')" :show="showModal" @close="showModal = false">
                 {{ endPageSummary }}
-            </Modal>
+            </ModalBigText>
+        </Teleport>
+
+        <Teleport to="body">
+            <ServerError :show="showError" @close="showError = false"></ServerError>
         </Teleport>
     </div>
 </template>
@@ -72,13 +76,14 @@
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
 
-    import Modal from '@/views/Solo/Lobby/mobile/Modal.vue';
+    import ModalBigText from '@/components/popup/BasicBigContent.vue';
+    import ServerError from '@/components/popup/ServerError.vue';
     
     import LargeHeader from '@/ui/text/LargeHeader.vue';
     import Text from '@/ui/text/Text.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { startPage, endPage, endPageSummary } = storeToRefs(useSoloModeStore());
+    const { startPage, endPage, endPageSummary, showError } = storeToRefs(useSoloModeStore());
 
     const startPageLoading = ref(false);
     const endPageLoading = ref(false);
@@ -88,8 +93,10 @@
     async function newStartPage() {
         if(startPageLoading.value != true) {
             startPageLoading.value = true;
-            await SoloMode.getStartPage();
 
+            let result = await SoloMode.getStartPage();
+            if(result == false) showError.value = true;
+            
             startPageLoading.value = false;
         }
     }
@@ -97,7 +104,9 @@
     async function newEndPage() {
         if(endPageLoading.value != true) {
             endPageLoading.value = true;
-            await SoloMode.getEndPage();
+
+            let result = await SoloMode.getEndPage();
+            if(result == false) showError.value = true;
 
             endPageLoading.value = false;
         }

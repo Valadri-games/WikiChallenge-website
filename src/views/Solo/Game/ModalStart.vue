@@ -1,15 +1,13 @@
 <template>
     <Transition name="modal">
-        <div v-if="show" @click="$emit('close')" class="modal-mask">
-            <div class="modal-container p-4 pr-5">
-                <div class="m-auto max-h-full flex flex-col items-center border-4 border-100 rounded-3xl p-5 bg-900 shadow">
-                    <Header class="text-center w-full"> Compte introuvable </Header>
+        <div v-if="show" class="modal-mask">
+            <div class="modal-container p-4">
+                <div class="m-auto">
+                    <img v-if="!loading" src="@/assets/animations/pret_go.svg" class="w-96 h-96" />
+                </div>
 
-                    <Text class="mt-8 text-center"> Le mot de passe ou le pseudo sont incorrect, veuillez réessayer. </Text>
-
-                    <div class="pb-2 mt-8 w-full flex justify-center">
-                        <ButtonClassic @click="$emit('close')"> Réessayer </ButtonClassic>
-                    </div>
+                <div class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-full -mt-12">
+                    <Header v-if="loading"> Chargement </Header>
                 </div>
             </div>
         </div>
@@ -17,13 +15,11 @@
 </template>
 
 <script setup lang="ts">
-    import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
-    
     import Header from '@/ui/text/Header.vue';
-    import Text from '@/ui/text/Text.vue';
 
-    const props = defineProps({
+    defineProps({
         show: Boolean,
+        loading: Boolean,
     });
 </script>
 
@@ -35,7 +31,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(3px);
         transition: opacity 0.4s ease;
         overflow: hidden;

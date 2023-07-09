@@ -39,7 +39,7 @@
 
         <Text class="text-center mt-6 !font-bold"> OU </Text>
 
-        <div class="mb-36 pointer-events- opacity-">
+        <div class="mb-36 pointer-events-none opacity-50">
             <div class="ml-6 mr-6 rounded-3xl mt-6 flex overflow-hidden bg-accent">
                 <div class="list-element border-accent max-h-fit opacity-80" @click="gameMode = 5" :class="{ 'border-100': gameMode == 5, 'opacity-80': gameMode != 5 }">
                     <Text class="!font-bold"> DEFI QUOTIDIEN </Text>
@@ -67,13 +67,12 @@
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
     
-    import Header from '@/ui/text/Header.vue';
     import LargeHeader from '@/ui/text/LargeHeader.vue';
     import Text from '@/ui/text/Text.vue';
 
     import SoloMode from '@/static/soloMode';
 
-    import ServerError from '@/views/Solo/GameMode/mobile/ServerError.vue';
+    import ServerError from '@/components/popup/ServerError.vue';
 
     useSoloModeStore().reset();
 

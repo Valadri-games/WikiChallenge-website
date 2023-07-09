@@ -135,7 +135,7 @@
     import LargeHeader from '@/ui/text/LargeHeader.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    import Modal from '@/views/Solo/GameMode/desktop/Modal.vue';
+    import Modal from '@/views/Solo/GameMode/Modal.vue';
 
     const { homeFormStep } = storeToRefs(useGeneralStore());
 

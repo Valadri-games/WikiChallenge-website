@@ -13,7 +13,7 @@
     import { useGeneralStore } from "@/stores/general";
     import { useSoloModeStore } from "@/stores/soloMode";
 
-    import Mobile from "./mobile/Mobile.vue";
+    import Mobile from "./Mobile.vue";
 
     const { showMobile, minimumToRestore, lastPath } = storeToRefs(useGeneralStore()); 
     const { gameStarted, currentPage, startPage } = storeToRefs(useSoloModeStore());

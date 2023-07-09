@@ -83,11 +83,15 @@
         </Teleport>
 
         <Teleport to="body">
-            <ModalSummary :show="showEndSummary" @close="showEndSummary = false"></ModalSummary>
+            <ModalBigText :button="'Fermer'" :title="endPage.replaceAll('_', ' ')" :show="showEndSummary" @close="showEndSummary = false">
+                {{ endPageSummary }}
+            </ModalBigText>
         </Teleport>
 
         <Teleport to="body">
-            <PageNotFound :show="showErrorModal" @close="showErrorModal = false"></PageNotFound>
+            <ModalTextContent :button="'Reprendre'" :title="'Page indisponible'" :show="showErrorModal" @close="showErrorModal = false">
+                La page a laquelle vous tentez d'acceder n'existe plus ou est une page interdite.
+            </ModalTextContent>
         </Teleport>
     </div>
 </template>
@@ -103,17 +107,18 @@
 
     import WikiView from '@/components/wiki/WikiView.vue';
 
-    import ModalPause from '@/views/Solo/Game/mobile/ModalPause.vue';
-    import ModalQuit from '@/views/Solo/Game/mobile/ModalQuit.vue';
-    import ModalStart from '@/views/Solo/Game/mobile/ModalStart.vue';
-    import ModalSummary from '@/views/Solo/Game/mobile/ModalSummary.vue';
-    import PageNotFound from '@/views/Solo/Game/mobile/PageNotFound.vue';
+    import ModalPause from '@/components/popup/GamePause.vue';
+    import ModalQuit from '@/components/popup/ModalQuit.vue';
+
+    import ModalStart from './ModalStart.vue';
+    import ModalTextContent from '@/components/popup/BasicTextContent.vue';
+    import ModalBigText from '@/components/popup/BasicBigContent.vue';
 
     import Text from '@/ui/text/Text.vue';
     import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { endPage, gameStarted, gameEnded, gameStartDate, gameTimerPauses, pagesPath, currentPage, steps } = storeToRefs(useSoloModeStore());
+    const { endPage, gameStarted, gameEnded, gameStartDate, gameTimerPauses, pagesPath, currentPage, steps, endPageSummary } = storeToRefs(useSoloModeStore());
 
     const menuOpen = ref(false);
 

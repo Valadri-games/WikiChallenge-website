@@ -1,5 +1,5 @@
 <template>
-    <div class="relative rounded-full bg-900 border-100" :class="{ 'shadow': shadow, 'border-8': shadow }">
+    <div class="relative rounded-full bg-900 border-100" :class="{ 'shadow': shadow && !smallShadow, 'border-8': shadow && !smallShadow, 'border-3': smallShadow }">
         <img v-if="win" class="w-full h-full scale-125 absolute top-0 left-0" src="@/assets/animations/confetti.svg" />
         <img v-if="win" class="w-full h-full absolute top-0 left-0 pt-8" :class="{ '!pt-2': big }" :src="'/public/img/avatars/avatar' + avatarID + '_crown.svg'" />
         
@@ -27,6 +27,12 @@
         },
 
         big: {
+            type: Boolean,
+            default: false,
+            required: false,
+        },
+
+        smallShadow: {
             type: Boolean,
             default: false,
             required: false,

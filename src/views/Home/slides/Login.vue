@@ -2,7 +2,9 @@
     <div>
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
-            <Text class="mt-32"> Pseudo </Text>
+            <Header class="w-full text-center mt-28"> Connecte-toi </Header>
+
+            <Text class="mt-14"> Pseudo </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
                 <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
@@ -25,7 +27,9 @@
             </Teleport>
 
             <Teleport to="body">
-                <PasswordError :show="showPasswordError" @close="showPasswordError = false"></PasswordError>
+                <ModalTextContent :button="'Réessayer'" :title="'Compte introuvable'" :show="showPasswordError" @close="showPasswordError = false">
+                    Le mot de passe ou le pseudo sont incorrect, veuillez réessayer.
+                </ModalTextContent>
             </Teleport>
         </div>
     </div>
@@ -40,12 +44,13 @@
 
     import AccountManager from '@/static/accountManager';
 
+    import Header from '@/ui/text/Header.vue';
     import Text from '@/ui/text/Text.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
 
-    import ServerError from '@/views/Home/mobile/modal/ServerError.vue';
-    import PasswordError from '@/views/Home/mobile/modal/PasswordError.vue';
+    import ServerError from '@/components/popup/ServerError.vue';
+    import ModalTextContent from '@/components/popup/BasicTextContent.vue';
 
     const { playerName, homeFormStep, showMobile, showLoginError, showPasswordError, loggedIn } = storeToRefs(useGeneralStore());
 
