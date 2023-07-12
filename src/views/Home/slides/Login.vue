@@ -7,7 +7,7 @@
             <Text class="mt-14"> Pseudo </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning1 }" src="@/assets/icons/warning.svg" />
             </div>
 
@@ -41,6 +41,7 @@
     import router from '@/router/router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import AccountManager from '@/static/accountManager';
 
@@ -52,7 +53,8 @@
     import ServerError from '@/components/popup/ServerError.vue';
     import ModalTextContent from '@/components/popup/BasicTextContent.vue';
 
-    const { playerName, homeFormStep, showMobile, showLoginError, showPasswordError, loggedIn } = storeToRefs(useGeneralStore());
+    const { homeFormStep, showMobile, showLoginError, showPasswordError } = storeToRefs(useGeneralStore());
+    const { name, loggedIn } = storeToRefs(useAccountStore());
 
     const password = ref("");
 
@@ -60,7 +62,7 @@
     const displayInputWarning2 = ref(false);
 
     function buttonClicked() {
-        if(playerName.value.trim() == "") displayInputWarning1.value = true;
+        if(name.value.trim() == "") displayInputWarning1.value = true;
         else if(password.value.trim() == "") displayInputWarning2.value = true;
         else {
             displayInputWarning1.value = false;
@@ -71,7 +73,7 @@
     }
 
     function writingInput() {
-        if(playerName.value.trim() != "") displayInputWarning1.value = false;
+        if(name.value.trim() != "") displayInputWarning1.value = false;
         if(password.value.trim() != "") displayInputWarning2.value = false;
     }
 

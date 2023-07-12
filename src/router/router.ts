@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import { useGeneralStore } from "@/stores/general";
+import { useAccountStore } from "@/stores/account";
 
 import Home from "@/views/Home/Home.vue";
 import MainSlide from "@/views/Home/slides/MainSlide.vue";
@@ -24,6 +25,7 @@ import Privacy from "@/views/Settings/Privacy/Privacy.vue";
 import Account from "@/views/Settings/Account/Account.vue";
 import AccountInfos from "@/views/Settings/Account/AccountInfos/AccountInfos.vue";
 import AccountSettings from "@/views/Settings/Account/AccountSettings/AccountSettings.vue";
+import AccountStats from "@/views/Settings/Account/AccountStats/AccountStats.vue";
 
 let firstLoad = true;
 let firstLoadAnimation = false;
@@ -136,16 +138,6 @@ const router = createRouter({
                 },
 
                 {
-                    path: "loading",
-                    component: Loader,
-                    name: "loadingGamePath",
-                    meta: {
-                        depth: 1,
-                        transitionName: "fade"
-                    }
-                },
-
-                {
                     path: "lobby",
                     component: Lobby,
                     name: "selectPages",
@@ -220,9 +212,9 @@ const router = createRouter({
                         },
 
                         {
-                            path: "loading",
-                            component: Loader,
-                            name: "accountManagementLoader",
+                            path: "stats",
+                            component: AccountStats,
+                            name: "accountStats",
                             meta: {
                                 depth: 0,
                                 transitionName: "fade"
@@ -235,6 +227,16 @@ const router = createRouter({
                     }
                 },
             ],
+            meta: {
+                depth: 0,
+                transitionName: "fade"
+            }
+        },
+
+        {
+            path: "/loading",
+            component: Loader,
+            name: "loader",
             meta: {
                 depth: 0,
                 transitionName: "fade"
@@ -260,12 +262,13 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     let generalStore = useGeneralStore();
+    let accountStore = useAccountStore();
 
     if(to.path.includes("loading") && generalStore.loading == false) {
         router.replace({ path: '/' });
     }
 
-    if(to.path.includes("account") && generalStore.loggedIn == false) {
+    if(to.path.includes("settings/account") && accountStore.loggedIn == false) {
         router.replace({ path: '/' });
     }
 });

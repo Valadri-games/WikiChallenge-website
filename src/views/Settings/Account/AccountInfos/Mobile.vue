@@ -7,9 +7,9 @@
         <hr class="mt-2 ml-10 mr-10 border-none h-0.5 rounded-full bg-100 opacity-25" />
 
         <div class="relative ml-8 mr-8 mt-8">
-            <Avatar :avatarID=avatarID :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
+            <Avatar :avatarID=avatarid :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
 
-            <Text class="ml-7 mt-3 scale-110"> {{ playerName }} </Text>
+            <Text class="ml-7 mt-3 scale-110"> {{ name }} </Text>
             <Text class="ml-2 opacity-75"> Joue depuis le {{ playSince }} </Text>
 
             <router-link to="/settings/account/edit">
@@ -22,7 +22,7 @@
 
         <hr class="mt-8 ml-10 mr-10 border-none h-0.5 rounded-full bg-100 opacity-25" />
 
-        <router-link to="/settings/account">
+        <router-link to="/settings/account/stats">
             <div class="flex flex-col relative ml-8 mr-8 mt-8">
                 <Header> Statistiques </Header>
 
@@ -30,7 +30,7 @@
                     <img src="@/assets/icons/clock.svg" />
 
                     <div class="flex flex-col flex-1">
-                        <Text class="scale-110 ml-3"> {{ todayStats.gamePlayed }} </Text>
+                        <Text class="scale-110 ml-3"> {{ todaygamecount }} </Text>
                         <Text class="opacity-75"> Parties aujourd'hui </Text>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     <img src="@/assets/icons/star.svg" />
 
                     <div class="flex flex-col flex-1">
-                        <Text class="scale-110 ml-3"> {{ todayStats.score }} </Text>
+                        <Text class="scale-110 ml-3"> {{ todayscorecount }} </Text>
                         <Text class="opacity-75"> XP du jour </Text>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
 
         <div class="fixed top-full left-1/2 -translate-x-1/2 -translate-y-full -mt-6 w-full flex flex-row gap-7 justify-center">
             <ButtonClassic :smallPad="true" @click="router.push('/')" class="whitespace-nowrap"> Jouer </ButtonClassic>
-            <ButtonClassic :smallPad="true" @click=selfLogout class="whitespace-nowrap logout"> Se deconnecter </ButtonClassic>
+            <ButtonClassic :smallPad="true" @click=accountStore.logout() class="whitespace-nowrap logout"> Se deconnecter </ButtonClassic>
         </div>
     </div>
 </template>
@@ -76,7 +76,7 @@
 
     import router from '@/router/router';
 
-    import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
 
@@ -85,8 +85,8 @@
     import Text from '@/ui/text/Text.vue';
     import Header from '@/ui/text/Header.vue';
 
-    const generalStore = useGeneralStore();
-    const { avatarID, playerName, todayStats, joinDate } = storeToRefs(generalStore);
+    const accountStore = useAccountStore();
+    const { avatarid, name, todaygamecount, todayscorecount, joinDate } = storeToRefs(accountStore);
 
     const playSince = ref("");
     let d1 = new Date(joinDate.value);
@@ -95,11 +95,6 @@
     let m = d1.getMonth();
     let y = d1.getFullYear();
     playSince.value = d + " " + monthName[m] + " " + y;
-
-    function selfLogout() {
-        generalStore.logout();
-        router.push('/');
-    }
 </script>
 
 <style scoped>

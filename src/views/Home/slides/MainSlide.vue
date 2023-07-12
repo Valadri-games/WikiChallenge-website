@@ -20,7 +20,7 @@
             <div class="h-slide-part">
                 <div class="absolute top-1/2 -translate-y-1/2 w-full">
                     <div class="relative pb-5 w-full flex justify-center">
-                        <Avatar :avatarID=avatarID class="w-96 h-96" />
+                        <Avatar :avatarID=avatarid class="w-96 h-96" />
 
                         <div class="absolute top-full -translate-y-full -ml-56">
                             <ButtonRounded @click=regenerateAvatar>
@@ -33,7 +33,7 @@
                         <Text class="w-[500px] !font-bold"> Choisis un pseudo </Text>
                         
                         <div class="relative mt-4">
-                            <input @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Joueur 123" class="bg-900 color-100 border-6 w-[500px] border-100 p-5 pl-10 pr-10 text-size rounded-full shadow outline-none" spellcheck="false" autocomplete="false" maxlength="25"  />
+                            <input @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Joueur 123" class="bg-900 color-100 border-6 w-[500px] border-100 p-5 pl-10 pr-10 text-size rounded-full shadow outline-none" spellcheck="false" autocomplete="false" maxlength="25"  />
                             <img class="h-14 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-12" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
                         </div>
 
@@ -49,7 +49,7 @@
             <!-- New user --> 
             <div v-if="!loggedIn">
                 <div class="relative w-full flex justify-center mt-4">
-                    <Avatar :avatarID=avatarID class="h-[190px] w-[190px]" />
+                    <Avatar :avatarID=avatarid class="h-[190px] w-[190px]" />
 
                     <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
                         <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
@@ -59,7 +59,7 @@
                 <Text class="text-center mt-14"> Choisis un pseudo </Text>
 
                 <div class="relative w-full pr-3 mt-4 flex justify-center">
-                    <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                    <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                     <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
                 </div>
 
@@ -77,9 +77,9 @@
             <div v-if="loggedIn">
                 <div class="relative">
                     <router-link to="/settings/account">
-                        <Avatar :avatarID=avatarID :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
+                        <Avatar :avatarID=avatarid :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
 
-                        <Text class="ml-6 mt-3 scale-110"> {{ playerName }} </Text>
+                        <Text class="ml-6 mt-3 scale-110"> {{ name }} </Text>
                         <Text class="ml-2 opacity-75"> Joue depuis {{ playSince }} </Text>
                     </router-link>
 
@@ -92,24 +92,24 @@
 
                 <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
 
-                <router-link to="/settings/account">
+                <router-link to="/settings/account/stats">
                     <div class="flex flex-col relative">
                         <Header> Statistiques </Header>
 
                         <div class="flex flex-row mt-4 gap-4">
-                            <img src="@/assets/icons/clock.svg" />
+                            <img class="w-12" src="@/assets/icons/clock.svg" />
 
                             <div class="flex flex-col flex-1">
-                                <Text class="scale-110 ml-3"> {{ todayStats.gamePlayed }} </Text>
+                                <Text class="scale-110 ml-3"> {{ todaygamecount }} </Text>
                                 <Text class="opacity-75"> Parties aujourd'hui </Text>
                             </div>
                         </div>
 
                         <div class="flex flex-row mt-4 gap-4">
-                            <img src="@/assets/icons/star.svg" />
+                            <img class="w-12" src="@/assets/icons/star.svg" />
 
                             <div class="flex flex-col flex-1">
-                                <Text class="scale-110 ml-3"> {{ todayStats.score }} </Text>
+                                <Text class="scale-110 ml-3"> {{ todayscorecount }} </Text>
                                 <Text class="opacity-75"> XP du jour </Text>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                 <!-- </router-link> -->
 
                 <div class="mt-5 flex justify-center">
-                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
+                    <ButtonClassic @click=loginPlayButton> Jouer </ButtonClassic>
                 </div>
             </div>
 
@@ -154,6 +154,7 @@
     import { socketConnected } from '@/socket';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import NotConnected from '@/components/popup/NotConnected.vue';
 
@@ -166,7 +167,8 @@
     import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { homeFormStep, avatarID, playerName, showMobile, avatarCount, loggedIn, todayStats, minimumToRestore, joinDate, internetAvailable } = storeToRefs(useGeneralStore());
+    const { homeFormStep, showMobile, avatarCount, minimumToRestore, internetAvailable } = storeToRefs(useGeneralStore());
+    const { avatarid, name, loggedIn, joinDate, todaygamecount, todayscorecount } = storeToRefs(useAccountStore());
 
     const displayInputWarning = ref(false);
 
@@ -180,12 +182,12 @@
     playSince.value = monthName[m] + " " + y;
 
     function regenerateAvatar() {
-        if(avatarID.value < avatarCount.value) avatarID.value += 1;
-        else avatarID.value = 1;
+        if(avatarid.value < avatarCount.value) avatarid.value += 1;
+        else avatarid.value = 1;
     }
 
     function buttonClicked() {
-        if(playerName.value.trim() == "") displayInputWarning.value = true;
+        if(name.value.trim() == "") displayInputWarning.value = true;
         else {
             displayInputWarning.value = false;
             router.push('/mode');
@@ -197,8 +199,13 @@
         else showConnectionErrorPopup.value = true;
     }
 
+    function loginPlayButton() {
+        if(internetAvailable.value && socketConnected.value) buttonClicked();
+        else showConnectionErrorPopup.value = true;
+    }
+
     function writingInput() {
-        if(playerName.value.trim() != "") displayInputWarning.value = false;
+        if(name.value.trim() != "") displayInputWarning.value = false;
     }
 
     function scrollToBottom() {

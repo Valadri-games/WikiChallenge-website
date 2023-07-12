@@ -13,8 +13,6 @@
 <script setup lang="ts">
     import { storeToRefs } from "pinia";
 
-    import router from "@/router/router";
-
     import { useGeneralStore } from "@/stores/general";
 
     import MobileMenuVue from "@/components/menu/MobileMenu.vue";
@@ -24,9 +22,5 @@
 
     import HamburgerMenu from "@/components/menu/HamburgerMenu.vue";
 
-    const { showMobile, loggedIn } = storeToRefs(useGeneralStore());
-
-    if(loggedIn.value != true) {
-        router.push("/");
-    }
+    const { showMobile } = storeToRefs(useGeneralStore());
 </script>

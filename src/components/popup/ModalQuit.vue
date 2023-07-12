@@ -5,7 +5,7 @@
 
             <Text class="mt-8 text-center"> La partie en cours sera annulée. Tu ne pourras pas reprendre ta progression </Text>
 
-            <div class="pb-2 mt-8 w-full flex flex-row gap-10 justify-center">
+            <div class="pb-2 mt-8 mb-4 w-full flex flex-row gap-10 justify-center">
                 <ButtonClassic class="!pl-10 !pr-10" @click="$emit('close')"> Rester </ButtonClassic>
                 <ButtonClassic class="quit !pl-10 !pr-10" @click="$router.push('/solo')"> Quitter </ButtonClassic>
             </div>

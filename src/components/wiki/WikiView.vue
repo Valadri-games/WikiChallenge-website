@@ -10,8 +10,6 @@
 
     import router from '@/router/router';
 
-    import Utils from '@/static/utils';
-
     import { useGeneralStore } from "@/stores/general";
     import { useSoloModeStore } from '@/stores/soloMode';
 

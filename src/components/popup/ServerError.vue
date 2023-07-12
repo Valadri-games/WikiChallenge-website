@@ -1,14 +1,14 @@
 <template>
     <PopupBase :show="show">
         <div class="flex flex-col items-center overflow-auto">
-            <div class="flex flex-row gap-10 mt-10 justify-center items-center">
+            <div class="flex flex-row gap-10 mt-4 justify-center items-center">
                 <img class="h-16 w-16" src="@/assets/icons/server.svg" />
                 <Header> Une erreur <br /> s'est produite </Header>
             </div>
 
             <Text class="mt-8 text-center"> Une erreur s'est produite lors de la communication avec le serveur. Veuillez réessayer dans quelques secondes. </Text>
 
-            <div class="pb-2 mt-8 w-full flex justify-center">
+            <div class="pb-2 mt-8 mb-4 w-full flex justify-center">
                 <ButtonClassic @click="$emit('close')"> Réessayer </ButtonClassic>
             </div>
         </div>

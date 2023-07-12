@@ -1,12 +1,14 @@
 import router from "@/router/router";
 
 import { socket } from "@/socket";
+import { useAccountStore } from "@/stores/account";
 
 import { useGeneralStore } from "@/stores/general";
 
 export default class AccountManager {
     static async createAccount(password: string) {
         const generalStore = useGeneralStore();
+        const accountStore = useAccountStore();
 
         if(socket.connected != true) {
             generalStore.showLoginError = true;
@@ -15,7 +17,7 @@ export default class AccountManager {
 
         generalStore.loading = true;
 
-        router.push('/settings/account/loading');
+        router.push('/loading');
 
         let result: any = await new Promise((resolve) => {
             socket.on("createAccount", (data) => {
@@ -23,13 +25,13 @@ export default class AccountManager {
 
                 setTimeout(() => {
                     resolve(data);
-                }, 800);
+                }, 500);
             });
     
             socket.emit('createAccount', {
-                name: generalStore.playerName,
+                name: accountStore.name,
                 password: password,
-                avatarid: generalStore.avatarID,
+                avatarid: accountStore.avatarid,
             });
 
             setTimeout(() => {
@@ -38,8 +40,12 @@ export default class AccountManager {
         });
 
         if(result.succes == true) {
-            generalStore.loggedIn = true;
-            generalStore.sessionId = result.sessionid;
+            accountStore.loggedIn = true;
+            accountStore.sessionid = result.sessionid;
+
+            /* Set default values */
+            accountStore.joinDate = Date.now();
+            accountStore.lastlogin = Date.now();
 
             router.push("/");
         } else {
@@ -52,6 +58,7 @@ export default class AccountManager {
 
     static async login(password: string) {
         const generalStore = useGeneralStore();
+        const accountStore = useAccountStore();
 
         if(socket.connected != true) {
             generalStore.showLoginError = true;
@@ -60,19 +67,16 @@ export default class AccountManager {
 
         generalStore.loading = true;
 
-        router.push('/settings/account/loading');
+        router.push('/loading');
 
         let result: any = await new Promise((resolve) => {
             socket.on("login", (data) => {
                 socket.off('login');
-
-                setTimeout(() => {
-                    resolve(data);
-                }, 800);
+                resolve(data);
             });
     
             socket.emit('login', {
-                name: generalStore.playerName,
+                name: accountStore.name,
                 password: password,
             });
 
@@ -81,18 +85,18 @@ export default class AccountManager {
             }, 5000); // Set 5000
         });
 
-        if(result.succes == true) {
-            generalStore.loggedIn = true;
-            generalStore.sessionId = result.sessionid;
+        generalStore.loading = false;
 
-            generalStore.loadAccountData(result.data);
+        if(result.succes == true) {
+            accountStore.loggedIn = true;
+            accountStore.sessionid = result.sessionid;
+
+            accountStore.loadAccountData(result.data);
 
             router.push("/");
         } else {
             generalStore.showPasswordError = true;
-
-            if(generalStore.showMobile) router.replace("/login");
-            else router.replace("/settings/account/login");
+            router.replace("/login");
         }
     }
 }

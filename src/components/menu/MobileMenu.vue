@@ -27,14 +27,14 @@
             <div v-if="loggedIn" class="absolute left-1/2 top-full -translate-y-full -translate-x-1/2 pl-6 pr-6 pb-4">
                 <div class="flex flex-row bg-900 rounded-3xl p-3 pr-8 pl-4 items-center">
                     <div class="flex-1 flex-row flex gap-4 items-center">
-                        <Avatar :big="true" :smallShadow="true" :avatarID=avatarID class="w-20 h-20" />
-                        <Text class="scale-110 ml-1"> {{ playerName }} </Text>
+                        <Avatar :big="true" :smallShadow="true" :avatarID=avatarid class="w-20 h-20" />
+                        <Text class="scale-110 ml-1"> {{ name }} </Text>
                     </div>
 
                     <hr class="rotate-90 bg-100 w-16 h-1 border-none" />
 
                     <div class="flex flex-col">
-                        <Text class="whitespace-nowrap"> {{ accountScore }} </Text>
+                        <Text class="whitespace-nowrap"> {{ score }} </Text>
                         <Text class="whitespace-nowrap opacity-75"> XP Total </Text>
                     </div>
                 </div>
@@ -48,13 +48,15 @@
     import { RouterLink } from 'vue-router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import ButtonContent from '@/ui/buttons/ButtonContent.vue';
     import Text from '@/ui/text/Text.vue';
 
     import Avatar from '@/components/avatar/Avatar.vue';
 
-    const { hamburgerChecked, avatarID, loggedIn, playerName, accountScore } = storeToRefs(useGeneralStore());
+    const { hamburgerChecked } = storeToRefs(useGeneralStore());
+    const { avatarid, loggedIn, name, score } = storeToRefs(useAccountStore());
 </script>
 
 <style scoped>

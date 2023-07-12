@@ -2,7 +2,7 @@
     <div class="absolute w-full h-full overflow-hidden flex flex-col">
         <div class="absolute h-full w-full duration-500" :class="{ 'top-0': showPath == false, '-top-full': showPath }">
             <div class="flex justify-center items-center" :class="{ 'opacity-0': !animationStep2 }">
-                <Avatar :shadow="false" :win="true" :avatarID=avatarID class="h-72 w-72" />
+                <Avatar :shadow="false" :win="true" :avatarID=avatarid class="h-72 w-72" />
             </div>
 
             <div class="mt-12 duration-500" :class="{ 'opacity-0': !animationStep2 }">
@@ -117,7 +117,7 @@
                 <div class="relative w-full flex justify-center mt-16 mb-10">
                     <ButtonClassic class="max-w-fit" @click="finish"> Continuer </ButtonClassic>
 
-                    <router-link to="/settings/account/create" v-if="!loggedIn">
+                    <router-link to="/account-infos" v-if="!loggedIn">
                         <ButtonRounded class="absolute left-full -translate-x-full -ml-4 min-w-max !p-2.5"> <img class="h-10 w-10" src="@/assets/icons/save.svg" /> </ButtonRounded>
                     </router-link>
                 </div>  
@@ -132,7 +132,7 @@
 
     import router from '@/router/router';
 
-    import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
     import { useSoloModeStore } from '@/stores/soloMode';
 
     import { socket } from '@/socket';
@@ -153,7 +153,7 @@
     const animationStep3 = ref(false);
     const animationStep4 = ref(false);
 
-    const { avatarID, loggedIn } = storeToRefs(useGeneralStore());
+    const { avatarid, loggedIn } = storeToRefs(useAccountStore());
 
     const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score } = storeToRefs(useSoloModeStore());
 

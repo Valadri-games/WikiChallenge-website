@@ -15,7 +15,7 @@
             <Text class="!scale-110 ml-8"> Changer d'avatar </Text>
 
             <div class="flex flex-row items-center mt-5 justify-center">
-                <Avatar :avatarID=avatarID :smallShadow="true" :big="true" class="h-[120px] w-[120px]" />
+                <Avatar :avatarID=avatarid :smallShadow="true" :big="true" class="h-[120px] w-[120px]" />
                 
                 <ButtonRounded class="scale-110 ml-8" @click=regenerateAvatar>
                     <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
@@ -35,6 +35,7 @@
     import router from '@/router/router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
@@ -45,10 +46,11 @@
     import Header from '@/ui/text/Header.vue';
 
     const generalStore = useGeneralStore();
-    const { avatarID, avatarCount } = storeToRefs(generalStore);
+    const { avatarCount } = storeToRefs(generalStore);
+    const { avatarid } = storeToRefs(useAccountStore());
 
     function regenerateAvatar() {
-        if(avatarID.value < avatarCount.value) avatarID.value += 1;
-        else avatarID.value = 1;
+        if(avatarid.value < avatarCount.value) avatarid.value += 1;
+        else avatarid.value = 1;
     }
 </script>

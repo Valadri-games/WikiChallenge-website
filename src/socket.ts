@@ -1,6 +1,6 @@
 import { reactive, ref } from "vue";
 import { io } from "socket.io-client";
-import { useGeneralStore } from "./stores/general";
+import { useAccountStore } from "./stores/account";
 
 let serverUrl = "https://wikiserver.valentin-lelievre.com";
 if(window.location.hostname == "localhost" || window.location.hostname.includes('192.168')) {
@@ -27,11 +27,11 @@ socket.on("connect", () => {
     socketState.connected = true;
     socketConnected.value = true;
 
-    let generalStore = useGeneralStore();
-    if(generalStore.loggedIn) {
+    let accountStore = useAccountStore();
+    if(accountStore.loggedIn) {
         socket.emit('sessionlogin', {
-            name: generalStore.playerName,
-            sessionId: generalStore.sessionId,
+            name: accountStore.name,
+            sessionid: accountStore.sessionid,
         });
     }
 });
@@ -48,8 +48,8 @@ socket.on("featuresEnabled", (data) => {
 socket.on("sessionlogin", (data) => {
     socket.off('sessionlogin');
 
-    let generalStore = useGeneralStore();
-    if(!data.succes) return generalStore.logout();
+    let accountStore = useAccountStore();
+    if(!data.succes) return accountStore.logout();
 
-    generalStore.loadAccountData(data.data);
+    accountStore.loadAccountData(data.data);
 });

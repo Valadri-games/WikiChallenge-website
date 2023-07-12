@@ -7,7 +7,7 @@
                 <slot></slot>
             </Text>
 
-            <div class="pb-2 mt-8 w-full flex justify-center">
+            <div class="pb-2 mt-8 mb-4 w-full flex justify-center">
                 <ButtonClassic @click="$emit('close')"> {{ button }} </ButtonClassic>
             </div>
         </div>

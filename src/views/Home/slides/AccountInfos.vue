@@ -38,13 +38,15 @@
     import router from '@/router/router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import Header from '@/ui/text/Header.vue';
     import Text from '@/ui/text/Text.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
 
-    const { homeFormStep, showMobile, loggedIn } = storeToRefs(useGeneralStore());
+    const { homeFormStep, showMobile } = storeToRefs(useGeneralStore());
+    const { loggedIn } = storeToRefs(useAccountStore());
 
     onMounted(() => {
         homeFormStep.value = -1;

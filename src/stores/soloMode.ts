@@ -2,6 +2,8 @@ import Utils from "@/static/utils";
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
 import { useGeneralStore } from "./general";
+import { useAccountStore } from "./account";
+import { socket } from "@/socket";
 
 export const useSoloModeStore = defineStore('soloMode', () => {
     // Create auto subscription to changes in order to save changes into the local storage
@@ -43,12 +45,30 @@ export const useSoloModeStore = defineStore('soloMode', () => {
         totalTime.value = Utils.calcGameTime(gameTimerPauses.value);
         score.value = Math.trunc((1 / steps.value) * 1500) + Math.trunc((1 / (totalTime.value / 1000)) * 1000);
 
-        let generalStore = useGeneralStore();
-        generalStore.accountScore += score.value;
-        generalStore.gamePlayed += 1;
+        let accountStore = useAccountStore();
+        accountStore.score += score.value;
+        accountStore.gameplayed += 1;
+        accountStore.pagesseen += steps.value + 1;
 
-        generalStore.todayStats.gamePlayed += 1;
-        generalStore.todayStats.score += score.value;;
+        if(gameMode.value == 1) accountStore.easygame += 1;
+        if(gameMode.value == 2) accountStore.mediumgame += 1;
+        if(gameMode.value == 3) accountStore.hardgame += 1;
+        if(gameMode.value == 4) accountStore.randompagegame += 1;
+        if(gameMode.value == 5) accountStore.dailychallengeplayed += 1;
+
+        accountStore.todaygamecount += 1;
+        accountStore.todayscorecount += score.value;
+
+        socket.emit("registergame", {
+            sessionid: accountStore.sessionid,
+            pagefrom: startPage.value,
+            pageto: endPage.value,
+            gamemode: gameMode.value,
+            score: score.value,
+            totaltime: totalTime.value,
+            date: Date.now(),
+            pathlength: steps.value,
+        });
     }
 
     function reset() {

@@ -3,7 +3,7 @@
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
             <div class="relative w-full flex justify-center mt-4">
-                <Avatar :avatarID=avatarID class="h-[190px] w-[190px]" />
+                <Avatar :avatarID=avatarid class="h-[190px] w-[190px]" />
 
                 <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
                     <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
@@ -13,7 +13,7 @@
             <Text class="mt-7"> Pseudo </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=playerName type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning1 }" src="@/assets/icons/warning.svg" />
             </div>
 
@@ -59,8 +59,10 @@
 
     import ServerError from '@/components/popup/ServerError.vue';
     import ModalTextContent from '@/components/popup/BasicTextContent.vue';
+import { useAccountStore } from '@/stores/account';
 
-    const { avatarID, playerName, avatarCount, homeFormStep, showMobile, showLoginError, showUnavailableName, loggedIn } = storeToRefs(useGeneralStore());
+    const { avatarCount, homeFormStep, showMobile, showLoginError, showUnavailableName } = storeToRefs(useGeneralStore());
+    const { avatarid, name, loggedIn } = storeToRefs(useAccountStore());
 
     const password = ref("");
 
@@ -68,12 +70,12 @@
     const displayInputWarning2 = ref(false);
 
     function regenerateAvatar() {
-        if(avatarID.value < avatarCount.value) avatarID.value += 1;
-        else avatarID.value = 1;
+        if(avatarid.value < avatarCount.value) avatarid.value += 1;
+        else avatarid.value = 1;
     }
 
     function buttonClicked() {
-        if(playerName.value.trim() == "") displayInputWarning1.value = true;
+        if(name.value.trim() == "") displayInputWarning1.value = true;
         else if(password.value.trim() == "") displayInputWarning2.value = true;
         else {
             displayInputWarning1.value = false;
@@ -84,7 +86,7 @@
     }
 
     function writingInput() {
-        if(playerName.value.trim() != "") displayInputWarning1.value = false;
+        if(name.value.trim() != "") displayInputWarning1.value = false;
         if(password.value.trim() != "") displayInputWarning2.value = false;
     }
 

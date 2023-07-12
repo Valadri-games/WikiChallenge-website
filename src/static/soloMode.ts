@@ -17,7 +17,7 @@ export default class SoloMode {
         const generalStore = useGeneralStore();
         generalStore.loading = true;
 
-        router.replace('/solo/loading');
+        router.replace('/loading');
 
         let result = await SoloMode.getStartPage();
         if(result == false) {

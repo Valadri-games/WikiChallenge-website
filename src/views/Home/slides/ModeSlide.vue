@@ -54,7 +54,7 @@
         <div class="absolute w-full h-full duration-500" v-if="showMobile">
             <Header class="text-center mt-3"> MODE DE JEU </Header>
 
-            <Text class="text-center mt-10">
+            <Text class="text-center mt-14">
                 Amuse-toi en affrontant tes ami.e.s dans un salon privé et en personnalisant ta partie&nbsp;! 
             </Text>
 
@@ -67,7 +67,7 @@
                 </router-link>
             </div>
 
-            <Text class="text-center mt-14">
+            <Text class="text-center mt-20">
                 Créer une partie solo personnalisée ou réalise le meilleure temps ou le plus court chemin du défi quotidien&nbsp;!
             </Text>
 

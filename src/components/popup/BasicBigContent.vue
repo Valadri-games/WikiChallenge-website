@@ -1,9 +1,9 @@
 <template>
     <PopupBase :show="show">
         <div class="flex flex-col items-center overflow-auto">
-            <Header class="text-center w-full mt-4"> {{ title }} </Header>
+            <Header class="text-center w-full mt-2"> {{ title }} </Header>
 
-            <div class="flex-1 overflow-y-auto pb-1 pt-1 rounded-2xl mt-8 text-justify">
+            <div class="flex-1 overflow-y-auto pb-1 pt-1 rounded-2xl mt-6 text-justify">
                 <Text> 
                     <slot></slot>
                 </Text>

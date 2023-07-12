@@ -3,7 +3,7 @@
         <LargeHeader> Wikipedia Challenge </LargeHeader>
     </div>
 
-    <div class="absolute w-[290px] h-[520px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -mt-1 bg-900 rounded-4xl p-6 shadow overflow-hidden">
+    <div class="absolute w-[300px] h-[520px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -mt-1 bg-900 rounded-4xl p-6 shadow overflow-hidden">
         <div class="relative w-full h-full flex flex-col duration-500" :class="{ '-top-full': seeRules, '-mt-7': seeRules, 'top-0': !seeRules }">
             <!-- Slide container horizontal start -->
             <div class="relative overflow-hidden flex-1">
@@ -86,13 +86,15 @@
     import router from '@/router/router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
 
     import ButtonContent from '@/ui/buttons/ButtonContent.vue';
     import Text from '@/ui/text/Text.vue';
     import Header from '@/ui/text/Text.vue';
     import LargeHeader from '@/ui/text/LargeHeader.vue';
 
-    const { homeFormStep, proposeRestore, loggedIn } = storeToRefs(useGeneralStore());
+    const { homeFormStep, proposeRestore } = storeToRefs(useGeneralStore());
+    const { loggedIn } = storeToRefs(useAccountStore());
 
     const seeRules = ref(false);
 </script>
