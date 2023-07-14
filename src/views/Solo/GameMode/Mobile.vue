@@ -39,17 +39,16 @@
 
         <Text class="text-center mt-6 !font-bold"> OU </Text>
 
-        <div class="mb-36 pointer-events-none opacity-50">
+        <div class="mb-36">
             <div class="ml-6 mr-6 rounded-3xl mt-6 flex overflow-hidden bg-accent">
-                <div class="list-element border-accent max-h-fit opacity-80" @click="gameMode = 5" :class="{ 'border-100': gameMode == 5, 'opacity-80': gameMode != 5 }">
+                <div class="list-element border-accent max-h-fit" @click="gameMode = 5" :class="{ 'border-100': gameMode == 5, 'opacity-80': gameMode != 5 }">
                     <Text class="!font-bold"> DEFI QUOTIDIEN </Text>
                     <Text class="mt-1"> Découvre le défis quotidien et réalise la meilleure performance </Text>
                 </div>
             </div>
         </div>
-
         <div class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 pb-8 flex justify-center">
-            <ButtonClassic @click="SoloMode.generateRandomPath()"> Jouer </ButtonClassic>
+            <ButtonClassic @click="play"> Jouer </ButtonClassic>
         </div>
 
         <Teleport to="body">
@@ -88,6 +87,11 @@
             left: 0,
             behavior: 'smooth'
         });
+    }
+
+    function play() {
+        if(gameMode.value != 5) SoloMode.generateRandomPath();
+        else SoloMode.playDailyChallenge();
     }
 </script>
 

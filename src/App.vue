@@ -27,7 +27,7 @@
 
     import Text from '@/ui/text/Text.vue';
 
-    // Init the server store
+    // Init the general store
     const { internetAvailable } = storeToRefs(useGeneralStore());
 
     // Defined wether or not the wifi popup info is displayed
@@ -63,13 +63,13 @@
         }
     }
 
-    // if(window.location.hostname != "localhost" && !window.location.hostname.includes('192.168')) {
-    //     let analiticsScript = document.createElement('script');
-    //     analiticsScript.setAttribute('src', 'https://wikistats.valentinllv.cloud/script.js');
-    //     analiticsScript.dataset.websiteId = "32419877-8f06-45bd-878e-5facbbd6d5da";
+    if(window.location.hostname != "localhost" && !window.location.hostname.includes('192.168')) {
+        let analiticsScript = document.createElement('script');
+        analiticsScript.setAttribute('src', 'https://wikistats.valentinllv.cloud/script.js');
+        analiticsScript.dataset.websiteId = "32419877-8f06-45bd-878e-5facbbd6d5da";
         
-    //     document.head.appendChild(analiticsScript);
-    // }
+        document.head.appendChild(analiticsScript);
+    }
 </script>
 
 <style scoped>

@@ -63,8 +63,8 @@
         </router-link>
 
         <div class="fixed top-full left-1/2 -translate-x-1/2 -translate-y-full -mt-6 w-full flex flex-row gap-7 justify-center">
-            <ButtonClassic :smallPad="true" @click="router.push('/')" class="whitespace-nowrap"> Jouer </ButtonClassic>
             <ButtonClassic :smallPad="true" @click=accountStore.logout() class="whitespace-nowrap logout"> Se deconnecter </ButtonClassic>
+            <ButtonClassic :smallPad="true" @click="router.push('/')" class="whitespace-nowrap"> Jouer </ButtonClassic>
         </div>
     </div>
 </template>

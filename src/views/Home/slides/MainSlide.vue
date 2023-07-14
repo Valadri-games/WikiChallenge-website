@@ -23,7 +23,7 @@
                         <Avatar :avatarID=avatarid class="w-96 h-96" />
 
                         <div class="absolute top-full -translate-y-full -ml-56">
-                            <ButtonRounded @click=regenerateAvatar>
+                            <ButtonRounded @click=Utils.regenerateAvatar>
                                 <img class="m-auto h-20 w-20" src="@/assets/icons/looped-arrow.svg" />
                             </ButtonRounded>
                         </div>
@@ -51,7 +51,7 @@
                 <div class="relative w-full flex justify-center mt-4">
                     <Avatar :avatarID=avatarid class="h-[190px] w-[190px]" />
 
-                    <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
+                    <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=Utils.regenerateAvatar>
                         <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
                     </ButtonRounded>
                 </div>
@@ -59,12 +59,12 @@
                 <Text class="text-center mt-14"> Choisis un pseudo </Text>
 
                 <div class="relative w-full pr-3 mt-4 flex justify-center">
-                    <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                    <input @focus=Utils.scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                     <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
                 </div>
 
                 <div class="mt-8 flex justify-center">
-                    <ButtonClassic @click=logoutPlayButtonClicked> Jouer </ButtonClassic>
+                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
                 </div>
 
                 <div class="mt-20 cursor-pointer flex flex-row justify-center items-center gap-2" @click="$emit('seeRules')">
@@ -74,7 +74,7 @@
             </div>
 
             <!-- Logged in --> 
-            <div v-if="loggedIn">
+            <div v-if="loggedIn && freshDataLoaded">
                 <div class="relative">
                     <router-link to="/settings/account">
                         <Avatar :avatarID=avatarid :smallShadow="true" :big="true" class="h-[80px] w-[80px]" />
@@ -122,24 +122,45 @@
 
                 <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
 
-                <!-- <router-link to="/settings/account"> -->
-                    <div class="flex flex-col relative opacity-50">
-                        <Header> Défi quotidien </Header>
-                        <Text class="mt-4 opacity-75 scale-90 -ml-4"> Il te reste 12h20 pour participer </Text>
+                <div v-if="!dailychallengedone" class="flex flex-col relative" @click=SoloMode.playDailyChallenge>
+                    <Header> Défi quotidien </Header>
+                    <Text class="mt-4 opacity-75 scale-90 -ml-4"> Il te reste <span class="font-bold">{{ Utils.convertMsToDuration(Utils.getTimeToTomorrow()) }}</span> pour participer </Text>
 
-                        <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1">
-                            <img class="h-11 w-11 min-w-fit" src="@/assets/icons/play.svg" />
-                        </div>
+                    <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1">
+                        <img class="h-11 w-11 min-w-fit" src="@/assets/icons/play.svg" />
                     </div>
-                <!-- </router-link> -->
+                </div>
+
+                <div v-if="dailychallengedone" class="flex flex-col relative">
+                    <Header> Défi quotidien </Header>
+                    <Text class="mt-4 opacity-75 scale-90 -ml-4"> Ton score aujourd'hui: <span class="font-bold">{{ dailychallengescore }}</span> </Text>
+
+                    <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1 opacity-50">
+                        <img class="h-11 w-11 min-w-fit" src="@/assets/icons/stats.svg" />
+                    </div>
+                </div>
 
                 <div class="mt-5 flex justify-center">
-                    <ButtonClassic @click=loginPlayButton> Jouer </ButtonClassic>
+                    <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
+                </div>
+            </div>
+
+            <!-- Logged in --> 
+            <div v-if="loggedIn && !freshDataLoaded">
+                <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
+                    <img class="w-28 h-28 -mb-6" src="@/assets/animations/loader.svg" />
+                    <Text class="text-center"> Chargement du ton compte </Text>
                 </div>
             </div>
 
             <Teleport to="body">
                 <NotConnected :show="showConnectionErrorPopup" @close="showConnectionErrorPopup = false"></NotConnected>
+            </Teleport>
+
+            <Teleport to="body">
+                <ModalTextContent :button="'OK'" :title="'Communication interrompu'" :show="showDownloadUserDataError" @close="showDownloadUserDataError = false">
+                    Un problème de communication avec le serveur est servenu. <br /><br />Les données de ton compte n'ont pas pu être chargées. Vérifie ta connexion et réessaie de te connecter.
+                </ModalTextContent>
             </Teleport>
         </div>
     </div>
@@ -151,12 +172,16 @@
 
     import router from '@/router/router';
 
-    import { socketConnected } from '@/socket';
+    import { socket } from '@/socket';
 
     import { useGeneralStore } from '@/stores/general';
     import { useAccountStore } from '@/stores/account';
 
+    import Utils from '@/static/utils';
+    import SoloMode from '@/static/soloMode';
+
     import NotConnected from '@/components/popup/NotConnected.vue';
+    import ModalTextContent from '@/components/popup/BasicTextContent.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
@@ -167,54 +192,26 @@
     import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { homeFormStep, showMobile, avatarCount, minimumToRestore, internetAvailable } = storeToRefs(useGeneralStore());
-    const { avatarid, name, loggedIn, joinDate, todaygamecount, todayscorecount } = storeToRefs(useAccountStore());
+    const { homeFormStep, showMobile, minimumToRestore, internetAvailable, showDownloadUserDataError } = storeToRefs(useGeneralStore());
+    const { avatarid, name, loggedIn, joinDate, todaygamecount, todayscorecount, freshDataLoaded, dailychallengedone, dailychallengescore } = storeToRefs(useAccountStore());
 
     const displayInputWarning = ref(false);
-
     const showConnectionErrorPopup = ref(false);
 
-    const playSince = ref("");
-    let d1 = new Date(joinDate.value);
-    let monthName = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin","Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-    let m = d1.getMonth();
-    let y = d1.getFullYear();
-    playSince.value = monthName[m] + " " + y;
-
-    function regenerateAvatar() {
-        if(avatarid.value < avatarCount.value) avatarid.value += 1;
-        else avatarid.value = 1;
-    }
+    const playSince = ref(Utils.getDateText(joinDate.value));
 
     function buttonClicked() {
-        if(name.value.trim() == "") displayInputWarning.value = true;
-        else {
-            displayInputWarning.value = false;
-            router.push('/mode');
-        }
-    }
-
-    function logoutPlayButtonClicked() {
-        if(internetAvailable.value && socketConnected.value) buttonClicked();
-        else showConnectionErrorPopup.value = true;
-    }
-
-    function loginPlayButton() {
-        if(internetAvailable.value && socketConnected.value) buttonClicked();
-        else showConnectionErrorPopup.value = true;
+        if(internetAvailable.value && socket.connected) {
+            if(name.value.trim() == "") displayInputWarning.value = true;
+            else {
+                displayInputWarning.value = false;
+                router.push('/mode');
+            }
+        } else showConnectionErrorPopup.value = true;
     }
 
     function writingInput() {
         if(name.value.trim() != "") displayInputWarning.value = false;
-    }
-
-    function scrollToBottom() {
-        //@ts-ignore
-        document.getElementById('app').firstElementChild.scroll({
-            top: 1000,
-            left: 0,
-            behavior: 'smooth'
-        }); 
     }
 
     onMounted(() => {

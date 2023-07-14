@@ -56,7 +56,9 @@
         let parsedData = parseWikiData(wikiData);
         html.value = parsedData.parse.text;
 
-        gameTimerPauses.value.push(Date.now());
+        if(gameEnded.value == false) {
+            gameTimerPauses.value.push(Date.now());
+        }
 
         clics += 1;
         if(endPage.value == currentPage.value || (window.location.hostname == "localhost" && clics == 4)) win();
@@ -87,15 +89,17 @@
     }
 
     function win() {
-        gameStarted.value = false;
-        gameEnded.value = true;
+        if(gameEnded.value == false) {
+            gameStarted.value = false;
+            gameEnded.value = true;
 
-        pagesPath.value.push(endPage.value);
-        gameTimerPauses.value.push(Date.now());
+            pagesPath.value.push(endPage.value);
+            gameTimerPauses.value.push(Date.now());
 
-        soloModeStore.win();
+            soloModeStore.win();
 
-        emit('win');
+            emit('win');
+        }
     }
 
     onMounted(() => {
@@ -104,7 +108,6 @@
         // @ts-ignore
         document.getElementById('wikipedia-content').addEventListener('click', async (e: any) => {
             e.preventDefault();
-            console.log(e);
 
             if(gameEnded.value == false) {
                 if(e.target.tagName == "a" || e.target.tagName == "A") {

@@ -51,8 +51,4 @@
     onMounted(() => {
         homeFormStep.value = -1;
     });
-
-    if(loggedIn.value == true) {
-        router.push("/settings/account/");
-    }
 </script>

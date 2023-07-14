@@ -33,7 +33,7 @@
 
             <!-- Current slide indicator start -->
             <transition name="fade">
-                <div class="flex justify-center" v-if="!proposeRestore && homeFormStep > -1">
+                <div class="flex justify-center" v-if="!proposeRestore && homeFormStep > -1 && (freshDataLoaded || !loggedIn)">
                     <div class="relative flex flex-row gap-4">
                         <div v-for="i in 3" class="h-3 w-3 rounded-full bg-accent"></div>
                         <div :style="{ 'left': ((homeFormStep - 1) * 19) + 'px' }" class="absolute left-0 bg-100 h-3 w-3 rounded-full duration-500"></div>
@@ -72,7 +72,7 @@
             <router-link to="/account-infos">
                 <ButtonContent :secondOption="true" class="flex flex-row gap-3 items-center max-w-max !pl-6 !pr-6">
                     <img class="h-10 w-10" src="@/assets/icons/account.svg" />
-                    <Header> Crée un compte </Header>
+                    <Header class="text-center"> Crée un compte </Header>
                 </ButtonContent>
             </router-link>
         </div>
@@ -94,7 +94,7 @@
     import LargeHeader from '@/ui/text/LargeHeader.vue';
 
     const { homeFormStep, proposeRestore } = storeToRefs(useGeneralStore());
-    const { loggedIn } = storeToRefs(useAccountStore());
+    const { loggedIn, freshDataLoaded } = storeToRefs(useAccountStore());
 
     const seeRules = ref(false);
 </script>

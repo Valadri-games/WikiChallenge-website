@@ -19,6 +19,7 @@ export const useSoloModeStore = defineStore('soloMode', () => {
 
     /* Game mode */
     const gameMode = ref(data.gameMode || 1);
+    const dailyChallengeDifficulty = ref(1);
 
     /* Game path */
     const startPage = ref(data.startPage || "");
@@ -59,6 +60,9 @@ export const useSoloModeStore = defineStore('soloMode', () => {
         accountStore.todaygamecount += 1;
         accountStore.todayscorecount += score.value;
 
+        accountStore.dailychallengedone = true;
+        accountStore.dailychallengescore = score.value;
+
         socket.emit("registergame", {
             sessionid: accountStore.sessionid,
             pagefrom: startPage.value,
@@ -73,6 +77,7 @@ export const useSoloModeStore = defineStore('soloMode', () => {
 
     function reset() {
         gameMode.value = 1;
+        dailyChallengeDifficulty.value = 1;
 
         startPage.value = "";
         endPage.value = "";
@@ -97,6 +102,7 @@ export const useSoloModeStore = defineStore('soloMode', () => {
         showError,
         
         gameMode,
+        dailyChallengeDifficulty,
 
         startPage,
         endPage,

@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-row gap-4 flex-1">
+                <div class="flex flex-row gap-4 flex-1 opacity-50">
                     <img class="w-12" src="@/assets/icons/calendar.svg" />
 
                     <div class="flex flex-col flex-1">
@@ -48,14 +48,16 @@
                     <img class="w-12" src="@/assets/icons/target.svg" />
 
                     <div class="flex flex-col flex-1">
-                        <Text class="scale-110 ml-3"> {{ streakdays }} jour </Text>
+                        <Text class="scale-110 ml-3"> {{ streakdays }} jour{{ (streakdays > 1 ? "s" : "") }} </Text>
                         <Text class="opacity-75"> De suite </Text>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex flex-col ml-4 mr-4 mt-16 gap-7">
+        <hr class="mt-8 ml-10 mr-10 border-none h-0.5 rounded-full bg-100 opacity-25" />
+
+        <div class="flex flex-col ml-4 mr-4 mt-8 gap-7">
             <Header> Depuis l'inscription </Header>
 
             <div class="flex flex-row">
@@ -88,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-row gap-4 flex-1">
+                <div class="flex flex-row gap-4 flex-1 opacity-50">
                     <img class="w-12" src="@/assets/icons/medal.svg" />
 
                     <div class="flex flex-col flex-1">

@@ -5,7 +5,7 @@
             <div class="relative w-full flex justify-center mt-4">
                 <Avatar :avatarID=avatarid class="h-[190px] w-[190px]" />
 
-                <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=regenerateAvatar>
+                <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=Utils.regenerateAvatar>
                     <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
                 </ButtonRounded>
             </div>
@@ -13,14 +13,14 @@
             <Text class="mt-7"> Pseudo </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=Utils.scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning1 }" src="@/assets/icons/warning.svg" />
             </div>
 
             <Text class="mt-7"> Mot de passe </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=password type="password" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=Utils.scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=password type="password" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning2 }" src="@/assets/icons/warning.svg" />
             </div>
 
@@ -47,6 +47,9 @@
     import router from '@/router/router';
 
     import { useGeneralStore } from '@/stores/general';
+    import { useAccountStore } from '@/stores/account';
+
+    import Utils from '@/static/utils';
 
     import AccountManager from '@/static/accountManager';
 
@@ -59,20 +62,14 @@
 
     import ServerError from '@/components/popup/ServerError.vue';
     import ModalTextContent from '@/components/popup/BasicTextContent.vue';
-import { useAccountStore } from '@/stores/account';
 
-    const { avatarCount, homeFormStep, showMobile, showLoginError, showUnavailableName } = storeToRefs(useGeneralStore());
-    const { avatarid, name, loggedIn } = storeToRefs(useAccountStore());
+    const { homeFormStep, showMobile, showLoginError, showUnavailableName } = storeToRefs(useGeneralStore());
+    const { avatarid, name } = storeToRefs(useAccountStore());
 
     const password = ref("");
 
     const displayInputWarning1 = ref(false);
     const displayInputWarning2 = ref(false);
-
-    function regenerateAvatar() {
-        if(avatarid.value < avatarCount.value) avatarid.value += 1;
-        else avatarid.value = 1;
-    }
 
     function buttonClicked() {
         if(name.value.trim() == "") displayInputWarning1.value = true;
@@ -90,20 +87,7 @@ import { useAccountStore } from '@/stores/account';
         if(password.value.trim() != "") displayInputWarning2.value = false;
     }
 
-    function scrollToBottom() {
-        //@ts-ignore
-        document.getElementById('app').firstElementChild.scroll({
-            top: 1000,
-            left: 0,
-            behavior: 'smooth'
-        }); 
-    }
-
     onMounted(() => {
         homeFormStep.value = -2;
     });
-
-    if(loggedIn.value == true) {
-        router.push("/settings/account/");
-    }
 </script>

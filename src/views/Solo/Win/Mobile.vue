@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <div class="mt-10 flex flex-col justify-center items-center">
+                <div v-if="gameMode != 5 && gameMode != 4" class="mt-10 flex flex-col justify-center items-center">
                     <Text> Ce parcours était-il trop difficile ? </Text>
 
                     <div class="mt-4 flex flex-row gap-10 pl-10 pr-10 justify-center items-center">
@@ -155,7 +155,7 @@
 
     const { avatarid, loggedIn } = storeToRefs(useAccountStore());
 
-    const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score } = storeToRefs(useSoloModeStore());
+    const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score, gameMode } = storeToRefs(useSoloModeStore());
 
     const showPath = ref(false);
 
@@ -165,8 +165,19 @@
     const scoreCounter = ref(0);
     
     function finish() {
-        if(pathFun.value == 1 || pathFun.value == 3) socket.emit('pathFun', pathFun.value);
-        if(pathDifficulty.value == 1 || pathDifficulty.value == 3) socket.emit('pathDifficulty', pathDifficulty.value);
+        if((pathFun.value == 1 || pathFun.value == 3) && gameMode.value != 5) socket.emit('pathFun', {
+            pathFun: pathFun.value,
+            pagetitle: endPage.value,
+        });
+
+        if((pathFun.value == 1 || pathFun.value == 3) && gameMode.value == 5) socket.emit('dailyChallengeFun', {
+            pathFun: pathFun.value,
+        });
+
+        if(pathDifficulty.value == 1 || pathDifficulty.value == 3) socket.emit('pathDifficulty', {
+            pathDifficulty: pathDifficulty.value,
+            pagetitle: endPage.value,
+        });
 
         router.push('/solo');
     }

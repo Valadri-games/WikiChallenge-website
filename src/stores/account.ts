@@ -1,5 +1,5 @@
 import router from "@/router/router";
-import { socket, socketConnected } from "@/socket";
+import { socket } from "@/socket";
 import Utils from "@/static/utils";
 import { defineStore } from "pinia";
 import { ref } from "vue";
@@ -9,7 +9,7 @@ export const useAccountStore = defineStore('account', () => {
     useAccountStore().$subscribe((mutation, state) => {
         localStorage.setItem('account', JSON.stringify(state));
 
-        if(socketConnected.value && loggedIn.value == true) {
+        if(socket.connected && loggedIn.value == true) {
             socket.emit('saveUserData', {
                 avatarid: avatarid.value,
                 name: name.value,
@@ -36,6 +36,7 @@ export const useAccountStore = defineStore('account', () => {
 
     const loggedIn = ref(data.loggedIn || false);
     const sessionid = ref(data.sessionid || "");
+    const freshDataLoaded = ref(false);
 
     const avatarid = ref(data.avatarid || Utils.randomInt(1, 7));
     const name = ref(data.name || "");
@@ -53,13 +54,18 @@ export const useAccountStore = defineStore('account', () => {
     const pagesseen = ref(data.pagesseen || 0);
     const daylichallengepodium = ref(data.daylichallengepodium || 0);
 
-    const streakdays = ref(data.streakdays || 0);
-    const lastlogin = ref(data.lastlogin || 0);
+    const streakdays = ref(data.streakdays || 1);
+    const lastlogin = ref(data.lastlogin || Date.now());
 
     const todaygamecount = ref(data.todaygamecount || 0);
     const todayscorecount = ref(data.todayscorecount || 0);
 
+    const dailychallengedone = ref(data.dailychallengedone || false);
+    const dailychallengescore = ref(data.dailychallengescore || 0);
+
     function loadAccountData(accountData: AccountData) {
+        freshDataLoaded.value = true;
+
         avatarid.value = accountData.avatarid;
         name.value = accountData.name;
 
@@ -81,11 +87,15 @@ export const useAccountStore = defineStore('account', () => {
         
         todaygamecount.value = accountData.todaygamecount;
         todayscorecount.value = accountData.todayscorecount;
+
+        dailychallengedone.value = accountData.dailychallengedone;
+        dailychallengescore.value = accountData.dailychallengescore;
     }
 
     function reset() {
         loggedIn.value = false;
         sessionid.value = 0;
+        freshDataLoaded.value = false;
 
         avatarid.value = Utils.randomInt(1, 7);
         name.value = "";
@@ -108,6 +118,9 @@ export const useAccountStore = defineStore('account', () => {
         
         todaygamecount.value = 0;
         todayscorecount.value = 0;
+
+        dailychallengedone.value = false;
+        dailychallengescore.value = 0;
     }
 
     function logout() {
@@ -118,6 +131,7 @@ export const useAccountStore = defineStore('account', () => {
     return {
         loggedIn,
         sessionid,
+        freshDataLoaded,
 
         avatarid,
         name,
@@ -140,6 +154,9 @@ export const useAccountStore = defineStore('account', () => {
 
         todaygamecount,
         todayscorecount,
+
+        dailychallengedone,
+        dailychallengescore,
 
         loadAccountData,
         reset,
@@ -169,4 +186,7 @@ interface AccountData {
 
     todaygamecount: number,
     todayscorecount: number,
+
+    dailychallengedone: boolean,
+    dailychallengescore: number,
 }

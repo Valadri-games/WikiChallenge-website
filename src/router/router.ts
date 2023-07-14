@@ -271,6 +271,10 @@ router.beforeEach(async (to, from) => {
     if(to.path.includes("settings/account") && accountStore.loggedIn == false) {
         router.replace({ path: '/' });
     }
+
+    if((to.path == "/create-account" || to.path == "/login") && accountStore.loggedIn == true) {
+        router.replace("/settings/account/");
+    }
 });
 
 router.afterEach((to, from) => {
@@ -279,27 +283,20 @@ router.afterEach((to, from) => {
     if(firstLoadAnimation) {
         to.meta.useTransition = "";
         firstLoadAnimation = false;
-
-        return;
     }
 
-    if(from.meta.transitionName == "fade") {
+    else if(from.meta.transitionName == "fade") {
         to.meta.useTransition = "fade";
-        return;
     }
 
-    if(to.meta.transitionName == "slide") {
-        if(to.meta.depth > from.meta.depth) to.meta.useTransition = "slide-in";
-        if(to.meta.depth < from.meta.depth) to.meta.useTransition = "slide-out";
-
+    else if(to.meta.transitionName == "slide") {
         if(to.meta.depth == from.meta.depth) to.meta.useTransition = "fade";
-
-        return;
+        else if(to.meta.depth > from.meta.depth) to.meta.useTransition = "slide-in";
+        else if(to.meta.depth < from.meta.depth) to.meta.useTransition = "slide-out";
     }
 
-    if(to.meta.transitionName == "fade") {
+    else if(to.meta.transitionName == "fade") {
         to.meta.useTransition = "fade";
-        return;
     }
 });
 

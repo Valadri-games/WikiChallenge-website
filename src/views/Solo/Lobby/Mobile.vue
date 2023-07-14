@@ -5,39 +5,53 @@
                 <img class="h-10 w-10 cursor-pointer" src="@/assets/icons/back-arrow.svg" />
             </div>
 
-            <LargeHeader class="text-center color-100"> Mode solo </LargeHeader>
+            <LargeHeader v-if="gameMode != 5" class="text-center color-100"> Mode solo </LargeHeader>
+            <LargeHeader v-if="gameMode == 5" class="text-center color-100"> Défi quotidien </LargeHeader>
             <img class="h-12 w-12" src="@/assets/icons/play-solo.svg" />
         </div>
 
-        <div class="mt-8 pl-6 pr-6">
+        <div v-if="gameMode == 5" class="mt-5 ml-6 mr-6 flex flex-row gap-2 items-center justify-center">
+            <div class="flex-1">
+                <Text v-if="!dailychallengedone"> Il te reste <span class="font-bold">{{ Utils.convertMsToDuration(Utils.getTimeToTomorrow()) }}</span> pour participer&nbsp;! </Text>
+                <Text v-if="dailychallengedone"> Tu as déjà participé aujourd'hui. Reviens demain pour un nouveau défi. </Text>
+            </div>
+
+            <div>
+                <div class="border-3 border-100 bg-accent2 p-2 pl-5 pr-5 rounded-full w-fit">
+                    <Text> Facile </Text>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pl-6 pr-6">
             <Text> Départ </Text>
 
-            <div class="relative w-full mt-2 pb-3">
+            <div class="relative w-full mt-1 pb-3">
                 <input type="text" placeholder="Page de départ" :value="startPage.replaceAll('_', ' ')" class="bg-900 color-100 w-full border-4 border-100 p-4 pl-6 pr-20 text-size rounded-full shadow text-ellipsis" spellcheck="false" autocomplete="false" />
 
-                <ButtonRounded @click="newStartPage" animation="scale" class="absolute top-1/2 -translate-y-1/2 -mt-[4.5px] left-full -ml-[54px] scale-[0.75]">
+                <ButtonRounded v-if="gameMode != 5" @click="newStartPage" animation="scale" class="absolute top-1/2 -translate-y-1/2 -mt-[4.5px] left-full -ml-[54px] scale-[0.75]">
                     <img class="h-12 w-12" src="@/assets/icons/looped-arrow.svg" :class="{ 'animation-rotate': startPageLoading }" />
                 </ButtonRounded>
             </div>
         </div>
 
-        <div class="mt-8 pl-6 pr-6">
+        <div class="mt-3 pl-6 pr-6">
             <Text> Arrivée </Text>
 
-            <div class="relative w-full mt-2 pb-3">
+            <div class="relative w-full mt-1 pb-3">
                 <input type="text" placeholder="Page d'arrivée" :value="endPage.replaceAll('_', ' ')" class="bg-900 color-100 w-full border-4 border-100 p-4 pl-6 pr-20 text-size rounded-full shadow text-ellipsis" spellcheck="false" autocomplete="false" />
 
-                <ButtonRounded @click="newEndPage" animation="scale" class="absolute top-1/2 -translate-y-1/2 -mt-[4.5px] left-full -ml-[54px] scale-[0.75]">
+                <ButtonRounded v-if="gameMode != 5" @click="newEndPage" animation="scale" class="absolute top-1/2 -translate-y-1/2 -mt-[4.5px] left-full -ml-[54px] scale-[0.75]">
                     <img class="h-12 w-12" src="@/assets/icons/looped-arrow.svg" :class="{ 'animation-rotate': endPageLoading }" />
                 </ButtonRounded>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col mb-32 w-full overflow-hidden mt-10">
-            <div class="bg-100 ml-6 mr-6 rounded-3xl">
+        <div class="flex-1 flex flex-col w-full overflow-hidden mt-5 mb-32">
+            <div class="bg-100 ml-6 mr-6 rounded-3xl flex flex-col overflow-hidden">
                 <Text class="ml-4 color-900 text-white mt-3"> Définition de la page finale </Text>
 
-                <div class="flex-1 flex flex-col border-4 border-100 p-4 rounded-3xl bg-900">
+                <div class="flex-1 flex flex-col border-4 border-100 p-4 rounded-3xl bg-900 overflow-hidden">
                     <Text class="flex-1 text !text-xl">
                         {{ endPageSummary }}
                     </Text>
@@ -47,8 +61,13 @@
             </div>
         </div>
 
-        <div class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 pb-8" :class="{ 'pointer-events-none': startPageLoading || endPageLoading, 'opacity-50': startPageLoading || endPageLoading }">
+        <!-- <div class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 pb-8" :class="{ 'pointer-events-none': startPageLoading || endPageLoading, 'opacity-50': startPageLoading || endPageLoading }">
             <ButtonClassic @click="router.replace('/solo/game')"> Jouer </ButtonClassic>
+        </div> -->
+
+        <div class="absolute left-0 top-full -translate-y-full w-full flex justify-center pb-8 gap-5">
+            <ButtonClassic :secondOption="true" :small-pad="true" @click="router.replace('/solo/')" class="pointer-events-none opacity-50"> Voir le classement </ButtonClassic>
+            <ButtonClassic v-if="!dailychallengedone" :small-pad="true" @click="router.replace('/solo/game')"> Jouer </ButtonClassic>
         </div>
 
         <Teleport to="body">
@@ -70,8 +89,10 @@
     import router from '@/router/router';
 
     import { useSoloModeStore } from '@/stores/soloMode';
+    import { useAccountStore } from '@/stores/account';
 
     import SoloMode from '@/static/soloMode';
+    import Utils from '@/static/utils';
 
     import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
@@ -83,7 +104,8 @@
     import Text from '@/ui/text/Text.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { startPage, endPage, endPageSummary, showError } = storeToRefs(useSoloModeStore());
+    const { dailychallengedone } = storeToRefs(useAccountStore());
+    const { startPage, endPage, endPageSummary, showError, gameMode } = storeToRefs(useSoloModeStore());
 
     const startPageLoading = ref(false);
     const endPageLoading = ref(false);
@@ -119,7 +141,7 @@
     }
     .text {
         display: -webkit-box;
-        -webkit-line-clamp: 9;
+        -webkit-line-clamp: 10;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }

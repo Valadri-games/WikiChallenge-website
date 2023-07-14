@@ -3,6 +3,7 @@ import { Ref, ref, watch } from "vue";
 import router from "@/router/router";
 
 import { useSoloModeStore } from "./soloMode";
+import Utils from "@/static/utils";
 
 export const useGeneralStore = defineStore('general', () => {
     // Create auto subscription to changes in order to save changes into the local storage
@@ -26,6 +27,7 @@ export const useGeneralStore = defineStore('general', () => {
     const showLoginError = ref(false);
     const showPasswordError = ref(false);
     const showUnavailableName = ref(false);
+    const showDownloadUserDataError = ref(false);
 
     /* Maximum time between session to propose a sesion restore */
     const minimumToRestore = ref(data.minimumToRestore || false);
@@ -47,13 +49,9 @@ export const useGeneralStore = defineStore('general', () => {
     const hamburgerChecked = ref(false);
 
     /* Responsive */
-    const showMobile = ref(isUserMobile());
-
-    function isUserMobile() {
-        return (document.documentElement.clientWidth < 850 ? true : false);
-    }
+    const showMobile = ref(Utils.isUserMobile());
     
-    window.addEventListener('resize', () => { showMobile.value = isUserMobile(); });
+    window.addEventListener('resize', () => { showMobile.value = Utils.isUserMobile(); });
 
     /* Reset and restore */
     function restore() {
@@ -84,6 +82,7 @@ export const useGeneralStore = defineStore('general', () => {
         showLoginError,
         showPasswordError,
         showUnavailableName,
+        showDownloadUserDataError,
 
         minimumToRestore,
         proposeRestore,

@@ -47,6 +47,8 @@ export default class AccountManager {
             accountStore.joinDate = Date.now();
             accountStore.lastlogin = Date.now();
 
+            accountStore.freshDataLoaded = true;
+
             router.push("/");
         } else {
             generalStore.showUnavailableName = true;

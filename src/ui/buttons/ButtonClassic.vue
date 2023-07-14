@@ -59,8 +59,8 @@
         }
 
         .small-paddings {
-            padding-left: 3rem !important;
-            padding-right: 3rem !important;
+            padding-left: 2.5rem !important;
+            padding-right: 2.5rem !important;
         }
     }
 </style>
