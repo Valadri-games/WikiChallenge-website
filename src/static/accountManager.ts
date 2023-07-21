@@ -39,6 +39,8 @@ export default class AccountManager {
             }, 5000); // Set 5000
         });
 
+        generalStore.loading = false;
+
         if(result.succes == true) {
             accountStore.loggedIn = true;
             accountStore.sessionid = result.sessionid;

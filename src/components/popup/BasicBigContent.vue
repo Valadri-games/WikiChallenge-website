@@ -3,14 +3,14 @@
         <div class="flex flex-col items-center overflow-auto">
             <Header class="text-center w-full mt-2"> {{ title }} </Header>
 
-            <div class="flex-1 overflow-y-auto pb-1 pt-1 rounded-2xl mt-6 text-justify">
+            <div class="flex-1 overflow-y-auto pb-1 pt-1 rounded-2xl mt-6">
                 <Text> 
                     <slot></slot>
                 </Text>
             </div>
             
             <div class="pb-2 mt-8 w-full flex justify-center">
-                <ButtonClassic @click="$emit('close')"> Réessayer </ButtonClassic>
+                <ButtonClassic @click="$emit('close')"> {{ button }} </ButtonClassic>
             </div>
         </div>
     </PopupBase>

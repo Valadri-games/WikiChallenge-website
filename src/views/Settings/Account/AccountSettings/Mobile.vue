@@ -9,7 +9,7 @@
             <Header> Paramètres </Header>
         </div>
 
-        <hr class="mt-2 ml-10 mr-10 border-none h-0.5 rounded-full bg-100 opacity-25" />
+        <hr class="mt-2 ml-10 mr-10 border-t-2 rounded-full border-100 opacity-30" />
 
         <div class="flex flex-col relative ml-8 mr-8 mt-8">
             <Text class="!scale-110 ml-8"> Changer d'avatar </Text>

@@ -2,30 +2,24 @@
     <div>
         <!-- Mobile --> 
         <div class="absolute w-full duration-500" v-if="showMobile">
-            <div class="relative w-full flex justify-center mt-4">
-                <Avatar :avatarID=avatarid class="h-[190px] w-[190px]" />
+            <Header class="w-full text-center mt-28"> Connecte-toi </Header>
 
-                <ButtonRounded class="absolute top-full -translate-y-full left-1/2 -translate-x-1/2 ml-20 -mt-2 scale-110" @click=Utils.regenerateAvatar>
-                    <img class="h-11 w-11" src="@/assets/icons/looped-arrow.svg" />
-                </ButtonRounded>
-            </div>
-
-            <Text class="mt-7"> Pseudo </Text>
+            <Text class="mt-14"> Pseudo </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=Utils.scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" autocapitalize="off"  maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning1 }" src="@/assets/icons/warning.svg" />
             </div>
 
             <Text class="mt-7"> Mot de passe </Text>
 
             <div class="relative w-full pr-3 mt-2 flex justify-center">
-                <input @focus=Utils.scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=password type="password" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" maxlength="25" />
+                <input @focus=scrollToBottom @input=writingInput @keyup.enter=buttonClicked v-model=password type="password" placeholder="Player 123" class="bg-900 w-full border-4 color-100 border-100 p-3 pl-6 pr-6 text-size rounded-full shadow" spellcheck="false" autocomplete="false" autocapitalize="off" maxlength="25" />
                 <img class="h-8 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-11 duration-300" :class="{ 'opacity-0': !displayInputWarning2 }" src="@/assets/icons/warning.svg" />
             </div>
 
             <div class="mt-10 flex justify-center">
-                <ButtonClassic @click=buttonClicked :smallPad="true"> Crée&nbsp;un&nbsp;compte </ButtonClassic>
+                <ButtonClassic @click=buttonClicked> Se connecter </ButtonClassic>
             </div>
 
             <Teleport to="body">
@@ -33,8 +27,8 @@
             </Teleport>
 
             <Teleport to="body">
-                <ModalTextContent :button="'OK'" :title="'Pseudo indisponible'" :show="showUnavailableName" @close="showUnavailableName = false">
-                    Le pseudo que vous avez choisi n'est pas disponible. Veuillez en choisir un autre.
+                <ModalTextContent :button="'Réessayer'" :title="'Compte introuvable'" :show="showPasswordError" @close="showPasswordError = false">
+                    Le mot de passe ou le pseudo sont incorrect, veuillez réessayer.
                 </ModalTextContent>
             </Teleport>
         </div>
@@ -49,22 +43,18 @@
     import { useGeneralStore } from '@/stores/general';
     import { useAccountStore } from '@/stores/account';
 
-    import Utils from '@/static/utils';
-
     import AccountManager from '@/static/accountManager';
 
+    import Header from '@/ui/text/Header.vue';
     import Text from '@/ui/text/Text.vue';
 
     import ButtonClassic from '@/ui/buttons/ButtonClassic.vue';
-    import ButtonRounded from '@/ui/buttons/ButtonRounded.vue';
-
-    import Avatar from '@/components/avatar/Avatar.vue';
 
     import ServerError from '@/components/popup/ServerError.vue';
     import ModalTextContent from '@/components/popup/BasicTextContent.vue';
 
-    const { homeFormStep, showMobile, showLoginError, showUnavailableName } = storeToRefs(useGeneralStore());
-    const { avatarid, name } = storeToRefs(useAccountStore());
+    const { homeFormStep, showMobile, showLoginError, showPasswordError } = storeToRefs(useGeneralStore());
+    const { name, loggedIn } = storeToRefs(useAccountStore());
 
     const password = ref("");
 
@@ -78,7 +68,7 @@
             displayInputWarning1.value = false;
             displayInputWarning2.value = false;
 
-            AccountManager.createAccount(password.value);
+            AccountManager.login(password.value);
         }
     }
 
@@ -87,7 +77,20 @@
         if(password.value.trim() != "") displayInputWarning2.value = false;
     }
 
+    function scrollToBottom() {
+        //@ts-ignore
+        document.getElementById('app').firstElementChild.scroll({
+            top: 1000,
+            left: 0,
+            behavior: 'smooth'
+        }); 
+    }
+
     onMounted(() => {
         homeFormStep.value = -2;
     });
+
+    if(loggedIn.value == true) {
+        router.push("/settings/account/");
+    }
 </script>

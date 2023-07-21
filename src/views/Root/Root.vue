@@ -1,6 +1,6 @@
 <template>
     <div class="bg-accent">
-        <HamburgerMenu v-once />
+        <HamburgerMenu v-once :light="true" />
 
         <MobileMenuVue v-if="showMobile" />
         <DesktopMenuVue v-if="!showMobile" />

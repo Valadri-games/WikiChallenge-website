@@ -63,6 +63,7 @@
         }
     }
 
+    // Analitics
     if(window.location.hostname != "localhost" && !window.location.hostname.includes('192.168')) {
         let analiticsScript = document.createElement('script');
         analiticsScript.setAttribute('src', 'https://wikistats.valentinllv.cloud/script.js');

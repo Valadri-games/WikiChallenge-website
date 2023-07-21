@@ -1,14 +1,14 @@
 <template>
     <div class="absolute w-full h-full top-0 left-0 bg-accent">
         <div class="absolute bg-900 w-[1450px] h-[850px] rounded-4xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-8 container-solid-shadow flex flex-col origin-top-left" :style="{ 'scale': containerScale }">
-            <div class="flex flex-row items-center justify-center">
+            <div class="flex flex-row items-center justify-center h-36">
                 <!-- Back arrow start -->
                 <div @click="router.push('/')" class="ml-12 cursor-pointer">
                     <img class="h-20 w-20" src="@/assets/icons/close.svg" />
                 </div>
                 <!-- Back arrow start -->
 
-                <LargeHeader class="flex-1 text-center color-100"> MODE SOLO </LargeHeader>
+                <Header class="flex-1 text-center color-100"> MODE SOLO </Header>
 
                 <div class="mr-12">
                     <img class="h-20 w-20" src="@/assets/icons/play-solo.svg" />
@@ -23,8 +23,8 @@
                             <div class="pl-6 pr-6">
                                 <Text class="!font-bold"> Départ </Text>
 
-                                <div class="relative w-full mt-2 pb-3 pr-10">
-                                    <input type="text" placeholder="Page de départ" :value="startPage.replaceAll('_', ' ')" class="bg-900 color-100 w-full border-6 border-100 p-6 pl-6 pr-20 text-size rounded-full shadow text-ellipsis" spellcheck="false" autocomplete="false" />
+                                <div class="relative w-full mt-2 pr-10">
+                                    <input type="text" placeholder="Page de départ" :value="startPage.replaceAll('_', ' ')" class="bg-900 color-100 w-full border-6 border-100 p-5 pl-12 pr-24 text-size rounded-full shadow text-ellipsis" spellcheck="false" autocomplete="false" />
 
                                     <ButtonRounded @click="newStartPage" animation="scale" class="absolute top-1/2 -translate-y-1/2 -mt-[4.5px] left-full p-5 -ml-[105px] scale-90">
                                         <img class="h-12 scale-25" src="@/assets/icons/looped-arrow.svg" :class="{ 'animation-rotate': startPageLoading }" />
@@ -32,7 +32,7 @@
                                 </div>
                             </div>
 
-                            <div class="mt-8 pl-6 pr-6">
+                            <div class="mt-12 pl-6 pr-6">
                                 <Text class="!font-bold"> Arrivée </Text>
 
                                 <div class="relative w-full mt-2 pb-3 pr-10">
@@ -132,7 +132,6 @@
     
     import Text from '@/ui/text/Text.vue';
     import Header from '@/ui/text/Header.vue';
-    import LargeHeader from '@/ui/text/LargeHeader.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
     import Modal from '@/views/Solo/GameMode/Modal.vue';

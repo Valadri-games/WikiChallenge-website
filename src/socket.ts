@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { io } from "socket.io-client";
 import { useAccountStore } from "./stores/account";
 import { useGeneralStore } from "./stores/general";
+import router from "./router/router";
 
 // const accountStore = useAccountStore();
 
@@ -27,10 +28,15 @@ export function socketInit() {
 
     let accountStore = useAccountStore();
     if(accountStore.loggedIn) {
+        useGeneralStore().loading = true;
+
         // If the session login respond takes too long then delete local account data and display an error warning
         sessionLoginTimeout = setTimeout(() => {
             useGeneralStore().showDownloadUserDataError = true;
-            accountStore.logout();
+            useGeneralStore().loading = false;
+
+            accountStore.reset();
+            router.replace('/');
 
             socket.off('sessionlogin');
         }, 5000);
@@ -42,12 +48,9 @@ socket.on("connect", () => {
 
     // If local data indicates that user was connected, then perform a validation of the user session
     let accountStore = useAccountStore();
-    if(accountStore.loggedIn) {
-        socket.emit('sessionlogin', {
-            name: accountStore.name,
-            sessionid: accountStore.sessionid,
-        });
-    }
+    if(accountStore.loggedIn) socket.emit('sessionlogin', {
+        sessionid: accountStore.sessionid,
+    });
 });
 
 socket.on("disconnect", () => {
@@ -61,14 +64,15 @@ socket.on("featuresEnabled", (data) => {
 // Session login respond, if session is valid then load the fresh new account data otherwise delete local account data
 socket.on("sessionlogin", (data) => {
     let accountStore = useAccountStore();
+    useGeneralStore().loading = false;
 
     socket.off('sessionlogin');
     clearTimeout(sessionLoginTimeout);
 
     if(!data.succes) {
         useGeneralStore().showDownloadUserDataError = true;
-        return accountStore.logout();
-    }
+        accountStore.reset();
+    } else accountStore.loadAccountData(data.data);
 
-    accountStore.loadAccountData(data.data);
+    router.replace('/');
 });

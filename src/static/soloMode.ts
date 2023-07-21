@@ -81,7 +81,10 @@ export default class SoloMode {
                 resolve(true);
             });
     
-            socket.emit('getStartPage', SoloMode.generateDifficultyLevel(soloModeStore));
+            socket.emit('getStartPage', {
+                gamesettings: SoloMode.generateDifficultyLevel(soloModeStore.gameMode),
+                otherpage: soloModeStore.endPage,
+            });
         });
     }
 
@@ -109,7 +112,10 @@ export default class SoloMode {
                 resolve(true);
             });
     
-            socket.emit('getEndPage', SoloMode.generateDifficultyLevel(soloModeStore));
+            socket.emit('getEndPage', {
+                gamesettings: SoloMode.generateDifficultyLevel(soloModeStore.gameMode),
+                otherpage: soloModeStore.startPage,
+            });
         });
     }
 
@@ -126,7 +132,7 @@ export default class SoloMode {
                 clearTimeout(timeoutId);
                 socket.off('getDailyChallenge');
 
-                if(data == false || data == "false") return resolve(false);
+                if(data.succes == false) return resolve(false);
 
                 let endPageSummary = await SoloMode.getEndPageSummary(data.endpage);
                 if(endPageSummary == false) return resolve(false);
@@ -137,10 +143,12 @@ export default class SoloMode {
                 soloModeStore.endPage = data.endpage;
                 soloModeStore.endPageSummary = endPageSummary;
 
+                soloModeStore.dailyChallengeDifficulty = data.difficulty;
+
                 resolve(true);
             });
     
-            socket.emit('getDailyChallenge', SoloMode.generateDifficultyLevel(soloModeStore));
+            socket.emit('getDailyChallenge');
         });
     }
 
@@ -160,36 +168,34 @@ export default class SoloMode {
         });
     }
 
-    static generateDifficultyLevel(soloModeStore: any) {
+    static generateDifficultyLevel(gameMode: number) {
         let interestLow;
         let interestHigh;
         let difficultyLow;
         let difficultyHigh;
 
-        let level = soloModeStore.gameMode;
-
-        if(level == 1) {
+        if(gameMode == 1) {
             interestLow = 90;
             interestHigh = 100;
             difficultyLow = 0;
             difficultyHigh = 1;
         }
 
-        if(level == 2) {
+        if(gameMode == 2) {
             interestLow = 55;
             interestHigh = 100;
             difficultyLow = 1;
             difficultyHigh = 3;
         }
 
-        if(level == 3) {
+        if(gameMode == 3) {
             interestLow = 35;
             interestHigh = 100;
             difficultyLow = 4;
             difficultyHigh = 7;
         }
 
-        if(level == 4) {
+        if(gameMode == 4) {
             interestLow = 50;
             interestHigh = 100;
             difficultyLow = 0;
@@ -209,8 +215,4 @@ export default class SoloMode {
 
         return text;
     }
-}
-
-interface Test {
-
 }

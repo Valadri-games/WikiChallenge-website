@@ -3,14 +3,14 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import { useGeneralStore } from "@/stores/general";
 import { useAccountStore } from "@/stores/account";
 
-import Home from "@/views/Home/Home.vue";
-import MainSlide from "@/views/Home/slides/MainSlide.vue";
-import ModeSlide from "@/views/Home/slides/ModeSlide.vue";
-import Mode2Slide from "@/views/Home/slides/MultiplayerSlide.vue";
-import CreateAccountSlide from "@/views/Home/slides/CreateAccount.vue";
-import AccountInfosSlide from "@/views/Home/slides/AccountInfos.vue";
-import LoginSlide from "@/views/Home/slides/Login.vue";
-import RestoreSessionSlide from "@/views/Home/slides/RestoreSessionSlide.vue";
+import Root from "@/views/Root/Root.vue";
+import Home from "@/views/Root/Home/Home.vue";
+import PlayMode from "@/views/Root/PlayMode/PlayMode.vue";
+import Mode2Slide from "@/views/Root/slides/MultiplayerSlide.vue";
+import CreateAccount from "@/views/Root/CreateAccount/CreateAccount.vue";
+import HomeAccountInfos from "@/views/Root/AccountInfos/AccountInfos.vue";
+import Login from "@/views/Root/Login/Login.vue";
+import RestoreSession from "@/views/Root/RestoreSession/RestoreSession.vue";
 
 import Solo from "@/views/Solo/Solo.vue";
 import GameMode from "@/views/Solo/GameMode/GameMode.vue";
@@ -27,8 +27,12 @@ import AccountInfos from "@/views/Settings/Account/AccountInfos/AccountInfos.vue
 import AccountSettings from "@/views/Settings/Account/AccountSettings/AccountSettings.vue";
 import AccountStats from "@/views/Settings/Account/AccountStats/AccountStats.vue";
 
+import Leaderboards from "@/views/Leaderboards/Leaderboards.vue";
+import DailyChallenge from "@/views/Leaderboards/DailyChallenge/DailyChallenge.vue";
+import GeneralLeaderboard from "@/views/Leaderboards/General/General.vue";
+
 let firstLoad = true;
-let firstLoadAnimation = false;
+let firstLoadAnimation = true;
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -36,7 +40,7 @@ const router = createRouter({
         // Prevent 404 route
         { 
             path: '/:pathMatch(.*)*',
-            component: Home,
+            component: Root,
             beforeEnter: () => {
                 firstLoadAnimation = true;
                 return '/';
@@ -45,12 +49,12 @@ const router = createRouter({
 
         {
             path: "/",
-            component: Home,
+            component: Root,
             children: [
                 {
                     path: "",
-                    component: MainSlide,
-                    name: "homeSlide1",
+                    component: Home,
+                    name: "home",
                     meta: {
                         depth: 0,
                         transitionName: "slide"
@@ -59,8 +63,8 @@ const router = createRouter({
 
                 {
                     path: "mode",
-                    component: ModeSlide,
-                    name: "homeSlide2",
+                    component: PlayMode,
+                    name: "mode-selection",
                     meta: {
                         depth: 1,
                         transitionName: "slide"
@@ -68,9 +72,9 @@ const router = createRouter({
                 },
 
                 {
-                    path: "mode-2",
+                    path: "join-group",
                     component: Mode2Slide,
-                    name: "homeSlide3",
+                    name: "jon-group",
                     meta: {
                         depth: 2,
                         transitionName: "slide"
@@ -79,8 +83,8 @@ const router = createRouter({
 
                 {
                     path: "account-infos",
-                    component: AccountInfosSlide,
-                    name: "accountInfosSlide",
+                    component: HomeAccountInfos,
+                    name: "account-infos",
                     meta: {
                         depth: -1,
                         transitionName: "slide"
@@ -89,8 +93,8 @@ const router = createRouter({
 
                 {
                     path: "create-account",
-                    component: CreateAccountSlide,
-                    name: "createAccountSlide",
+                    component: CreateAccount,
+                    name: "create-account",
                     meta: {
                         depth: -2,
                         transitionName: "slide"
@@ -99,8 +103,8 @@ const router = createRouter({
 
                 {
                     path: "login",
-                    component: LoginSlide,
-                    name: "loginSlide",
+                    component: Login,
+                    name: "login",
                     meta: {
                         depth: -2,
                         transitionName: "slide"
@@ -109,8 +113,8 @@ const router = createRouter({
 
                 {
                     path: "restore",
-                    component: RestoreSessionSlide,
-                    name: "restoreSlide",
+                    component: RestoreSession,
+                    name: "restore-session",
                     meta: {
                         depth: 0,
                         transitionName: "fade"
@@ -130,7 +134,7 @@ const router = createRouter({
                 {
                     path: "",
                     component: GameMode,
-                    name: "gameModeSelection",
+                    name: "game-mode-selection",
                     meta: {
                         depth: 1,
                         transitionName: "fade"
@@ -140,7 +144,7 @@ const router = createRouter({
                 {
                     path: "lobby",
                     component: Lobby,
-                    name: "selectPages",
+                    name: "select-pages",
                     meta: {
                         depth: 1,
                         transitionName: "fade"
@@ -150,7 +154,7 @@ const router = createRouter({
                 {
                     path: "game",
                     component: Game,
-                    name: "soloGame",
+                    name: "solo-game",
                     meta: {
                         depth: 1,
                         transitionName: "fade"
@@ -160,7 +164,7 @@ const router = createRouter({
                 {
                     path: "win",
                     component: Win,
-                    name: "winGame",
+                    name: "win-game",
                     meta: {
                         depth: 1,
                         transitionName: "fade"
@@ -180,7 +184,7 @@ const router = createRouter({
                 {
                     path: "privacy",
                     component: Privacy,
-                    name: "privacyInformations",
+                    name: "privacy-informations",
                     meta: {
                         depth: 0,
                         transitionName: "fade"
@@ -194,7 +198,7 @@ const router = createRouter({
                         {
                             path: "",
                             component: AccountInfos,
-                            name: "accountInformations",
+                            name: "account-informations",
                             meta: {
                                 depth: 0,
                                 transitionName: "fade"
@@ -204,7 +208,7 @@ const router = createRouter({
                         {
                             path: "edit",
                             component: AccountSettings,
-                            name: "accountSettings",
+                            name: "account-settings",
                             meta: {
                                 depth: 0,
                                 transitionName: "fade"
@@ -214,13 +218,52 @@ const router = createRouter({
                         {
                             path: "stats",
                             component: AccountStats,
-                            name: "accountStats",
+                            name: "account-stats",
                             meta: {
                                 depth: 0,
                                 transitionName: "fade"
                             }
                         },
                     ],
+                    meta: {
+                        depth: 0,
+                        transitionName: "fade"
+                    }
+                },
+            ],
+            meta: {
+                depth: 0,
+                transitionName: "fade"
+            }
+        },
+
+        {
+            path: "/leaderboards",
+            component: Leaderboards,
+            children: [
+                { 
+                    path: '',
+                    component: Home,
+                    beforeEnter: () => {
+                        firstLoadAnimation = true;
+                        return '/';
+                    },
+                },
+
+                {
+                    path: "daily-challenge",
+                    component: DailyChallenge,
+                    name: "daily-challenge-leaderboard",
+                    meta: {
+                        depth: 0,
+                        transitionName: "fade"
+                    }
+                },
+
+                {
+                    path: "general",
+                    component: GeneralLeaderboard,
+                    name: "general-leaderboard",
                     meta: {
                         depth: 0,
                         transitionName: "fade"
@@ -245,17 +288,7 @@ const router = createRouter({
     ],
 
     scrollBehavior: (to) => {
-        if(firstLoad) {
-            firstLoad = false;
-            firstLoadAnimation = true;
-
-            if(useGeneralStore().proposeRestore) {
-                if(to.fullPath != "/restore") {
-                    router.replace({ path: '/restore' });
-                }
-            } else router.replace({ path: '/' });
-        }
-
+        // Close menu
         useGeneralStore().hamburgerChecked = false;
     },
 });
@@ -263,6 +296,20 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     let generalStore = useGeneralStore();
     let accountStore = useAccountStore();
+
+    if(firstLoad) {
+        if(accountStore.loggedIn && !accountStore.freshDataLoaded) {
+            if(to.fullPath != '/loading') router.replace({ path: '/loading' });
+        }
+        else if(generalStore.proposeRestore) {
+            firstLoad = false;
+            router.replace({ path: '/restore' });
+        }
+        else {
+            firstLoad = false;
+            router.replace({ path: '/' });
+        }
+    }
 
     if(to.path.includes("loading") && generalStore.loading == false) {
         router.replace({ path: '/' });
@@ -285,9 +332,7 @@ router.afterEach((to, from) => {
         firstLoadAnimation = false;
     }
 
-    else if(from.meta.transitionName == "fade") {
-        to.meta.useTransition = "fade";
-    }
+    else if(from.meta.transitionName == "fade") to.meta.useTransition = "fade";
 
     else if(to.meta.transitionName == "slide") {
         if(to.meta.depth == from.meta.depth) to.meta.useTransition = "fade";
@@ -295,9 +340,7 @@ router.afterEach((to, from) => {
         else if(to.meta.depth < from.meta.depth) to.meta.useTransition = "slide-out";
     }
 
-    else if(to.meta.transitionName == "fade") {
-        to.meta.useTransition = "fade";
-    }
+    else if(to.meta.transitionName == "fade") to.meta.useTransition = "fade";
 });
 
 declare module 'vue-router' {

@@ -1,9 +1,9 @@
 <template>
-    <div class="absolute left-0 top-0 mt-7 ml-7 z-40">
+    <div class="absolute left-0 top-0 mt-7 ml-7 z-40 h-10">
         <input id="top-menu-hamburger" type="checkbox" class="hidden" v-model="hamburgerChecked" />
         
         <label class="cursor-pointer" id="menu-label" for="top-menu-hamburger">
-            <div v-for="i in 3" :key=i class="h-1.5 w-12 rounded-full duration-300" :class="{ 'mt-2': i != 0 }" :style="{ 'background-color': (['homeSlide1', 'homeSlide2', 'homeSlide3', 'restoreSlide', 'gameModeSelection', 'accountInfosSlide', 'createAccountSlide', 'loginSlide'].includes($route.name as string) || hamburgerChecked) ? 'var(--color-900)' : 'var(--color-100)' }"></div>
+            <div v-for="i in 3" :key=i class="h-1.5 w-12 rounded-full duration-300" :class="{ 'mt-2': i != 0 }" :style="{ 'background-color': light ? 'var(--color-900)' : 'var(--color-100)' }"></div>
         </label>
     </div>
 </template>
@@ -13,6 +13,14 @@
     import { storeToRefs } from 'pinia';
 
     const { hamburgerChecked } = storeToRefs(useGeneralStore());
+
+    defineProps({
+        light: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
+    });
 </script>
 
 <style scoped>

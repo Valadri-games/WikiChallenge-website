@@ -10,7 +10,7 @@
                 <!-- Back arrow start -->
                 <transition name="arrow-fade">
                     <div v-if="homeFormStep > 1" @click="router.go(-1)" class="absolute top-0 left-0 mt-3 z-20 cursor-pointer">
-                        <img class="h-10 w-10" src="@/assets/icons/back-arrow.svg" />
+                        <img class="h-10 w-10 min-w-max" src="@/assets/icons/back-arrow.svg" />
                     </div>
                 </transition>
                 <!-- Back arrow start -->
@@ -36,7 +36,7 @@
                 <div class="flex justify-center" v-if="!proposeRestore && homeFormStep > -1 && (freshDataLoaded || !loggedIn)">
                     <div class="relative flex flex-row gap-4">
                         <div v-for="i in 3" class="h-3 w-3 rounded-full bg-accent"></div>
-                        <div :style="{ 'left': ((homeFormStep - 1) * 19) + 'px' }" class="absolute left-0 bg-100 h-3 w-3 rounded-full duration-500"></div>
+                        <div :style="{ 'left': ((homeFormStep - 1) * 17) + 'px' }" class="absolute left-0 bg-100 h-3 w-3 rounded-full duration-500"></div>
                     </div>
                 </div>
             </transition>
@@ -68,7 +68,7 @@
 
     <!-- Account -->
     <transition name="fade">
-        <div v-if="!loggedIn && !proposeRestore && homeFormStep > -1" class="absolute left-0 top-full -translate-y-full w-full flex justify-center pb-4">
+        <div v-if="!loggedIn && !proposeRestore && homeFormStep > -1" class="absolute left-0 top-full -translate-y-full w-full flex justify-center pb-6">
             <router-link to="/account-infos">
                 <ButtonContent :secondOption="true" class="flex flex-row gap-3 items-center max-w-max !pl-6 !pr-6">
                     <img class="h-10 w-10" src="@/assets/icons/account.svg" />
@@ -76,6 +76,11 @@
                 </ButtonContent>
             </router-link>
         </div>
+    </transition>
+
+    <!-- Bottom menu -->
+    <transition name="fade">
+        <MobileMenu v-if="loggedIn && !proposeRestore" />
     </transition>
 </template>
 
@@ -87,6 +92,8 @@
 
     import { useGeneralStore } from '@/stores/general';
     import { useAccountStore } from '@/stores/account';
+
+    import MobileMenu from '@/components/bottomMenu/MobileMenu.vue';
 
     import ButtonContent from '@/ui/buttons/ButtonContent.vue';
     import Text from '@/ui/text/Text.vue';
@@ -101,7 +108,7 @@
 
 <style scoped>
     /* Back arrow fade transition with delay */
-    .arrow-fade-enter-active { transition: 0.3s; transition-delay: 0.4s; }
+    .arrow-fade-enter-active { transition: 0.3s; transition-delay: 0.5s; }
     .arrow-fade-leave-active { transition: 0.1s; }
     .arrow-fade-enter-from, .arrow-fade-leave-to  { opacity: 0; }
     .arrow-fade-enter-to, .arrow-fade-leave-from { opacity: 1; }

@@ -34,7 +34,7 @@
                         
                         <div class="relative mt-4">
                             <input @input=writingInput @keyup.enter=buttonClicked v-model=name type="text" placeholder="Joueur 123" class="bg-900 color-100 border-6 w-[500px] border-100 p-5 pl-10 pr-10 text-size rounded-full shadow outline-none" spellcheck="false" autocomplete="false" maxlength="25"  />
-                            <img class="h-14 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-12" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
+                            <img class="h-14 absolute left-full top-1/2 -translate-x-full -translate-y-1/2 -ml-12 duration-500" :class="{ 'opacity-0': !displayInputWarning }" src="@/assets/icons/warning.svg" />
                         </div>
 
                         <ButtonClassic class="mt-14" @click=buttonClicked> Jouer </ButtonClassic>
@@ -90,7 +90,7 @@
                     </router-link>
                 </div>
 
-                <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
+                <hr class="mt-5 mb-5 border-t-2 rounded-full border-100 opacity-30" />
 
                 <router-link to="/settings/account/stats">
                     <div class="flex flex-col relative">
@@ -100,7 +100,7 @@
                             <img class="w-12" src="@/assets/icons/clock.svg" />
 
                             <div class="flex flex-col flex-1">
-                                <Text class="scale-110 ml-3"> {{ todaygamecount }} </Text>
+                                <Text class="scale-110 max-w-min"> {{ todaygamecount }} </Text>
                                 <Text class="opacity-75"> Parties aujourd'hui </Text>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                             <img class="w-12" src="@/assets/icons/star.svg" />
 
                             <div class="flex flex-col flex-1">
-                                <Text class="scale-110 ml-3"> {{ todayscorecount }} </Text>
+                                <Text class="scale-110 max-w-min"> {{ todayscorecount }} </Text>
                                 <Text class="opacity-75"> XP du jour </Text>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                     </div>
                 </router-link>
 
-                <hr class="bg-100 mt-5 mb-5 h-0.5 opacity-75 border-none" />
+                <hr class="mt-5 mb-5 border-t-2 rounded-full border-100 opacity-30" />
 
                 <div v-if="!dailychallengedone" class="flex flex-col relative" @click=SoloMode.playDailyChallenge>
                     <Header> Défi quotidien </Header>
@@ -131,16 +131,18 @@
                     </div>
                 </div>
 
-                <div v-if="dailychallengedone" class="flex flex-col relative">
-                    <Header> Défi quotidien </Header>
-                    <Text class="mt-4 opacity-75 scale-90 -ml-4"> Ton score aujourd'hui: <span class="font-bold">{{ dailychallengescore }}</span> </Text>
+                <div v-if="dailychallengedone" class="relative">
+                    <div class="flex flex-col" @click=SoloMode.playDailyChallenge>
+                        <Header> Défi quotidien </Header>
+                        <Text class="mt-4 opacity-75 scale-90 -ml-4"> Ton score aujourd'hui: <span class="font-bold">{{ dailychallengescore }}</span> </Text>
+                    </div>
 
-                    <div class="absolute top-0 left-full -translate-x-full -ml-6 mt-1 opacity-50">
+                    <div @click="Leaderboards.loadDailyChallengeLeaderboard" class="absolute top-0 left-full -translate-x-full mt-1 flex items-center -ml-5 justify-center w-18 h-18">
                         <img class="h-11 w-11 min-w-fit" src="@/assets/icons/stats.svg" />
                     </div>
                 </div>
 
-                <div class="mt-5 flex justify-center">
+                <div class="mt-7 flex justify-center">
                     <ButtonClassic @click=buttonClicked> Jouer </ButtonClassic>
                 </div>
             </div>
@@ -162,6 +164,12 @@
                     Un problème de communication avec le serveur est servenu. <br /><br />Les données de ton compte n'ont pas pu être chargées. Vérifie ta connexion et réessaie de te connecter.
                 </ModalTextContent>
             </Teleport>
+
+            <Teleport to="body">
+                <ModalTextContent :button="'OK'" :title="'Echec du chargement des données'" :show="showServerError" @close="showServerError = false">
+                    Une erreur est survenue lors du chargement. Veuillez réessayer dans quelques secondes.
+                </ModalTextContent>
+            </Teleport>
         </div>
     </div>
 </template>
@@ -179,6 +187,7 @@
 
     import Utils from '@/static/utils';
     import SoloMode from '@/static/soloMode';
+    import Leaderboards from '@/static/leaderboards';
 
     import NotConnected from '@/components/popup/NotConnected.vue';
     import ModalTextContent from '@/components/popup/BasicTextContent.vue';
@@ -192,7 +201,7 @@
     import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { homeFormStep, showMobile, minimumToRestore, internetAvailable, showDownloadUserDataError } = storeToRefs(useGeneralStore());
+    const { homeFormStep, showMobile, minimumToRestore, internetAvailable, showDownloadUserDataError, showServerError } = storeToRefs(useGeneralStore());
     const { avatarid, name, loggedIn, joinDate, todaygamecount, todayscorecount, freshDataLoaded, dailychallengedone, dailychallengescore } = storeToRefs(useAccountStore());
 
     const displayInputWarning = ref(false);

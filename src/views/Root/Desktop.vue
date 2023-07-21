@@ -24,7 +24,7 @@
         <div class="flex justify-center gap-5">
             <div class="relative flex flex-row gap-5">
                 <div v-for="i in 3" class="bg-accent h-5 w-5 rounded-full"></div>
-                <div :style="{ 'left': ((homeFormStep - 1) * 28) + 'px' }" class="absolute ml-0 left-0 bg-100 h-5 w-5 rounded-full duration-300"></div>
+                <div :style="{ 'left': ((homeFormStep - 1) * 25) + 'px' }" class="absolute ml-0 left-0 bg-100 h-5 w-5 rounded-full duration-500"></div>
             </div>
         </div>
         <!-- Current slide indicator end -->

@@ -1,7 +1,5 @@
 <template>
     <div class="bg-900">
-        <HamburgerMenu v-once />
-
         <MobileMenuVue v-if="showMobile" />
         <DesktopMenuVue v-if="!showMobile" />
 
@@ -19,8 +17,6 @@
     import DesktopMenuVue from "@/components/menu/DesktopMenu.vue";
     // import Desktop from "./desktop/Desktop.vue";
     import Mobile from "./Mobile.vue";
-
-    import HamburgerMenu from "@/components/menu/HamburgerMenu.vue";
 
     const { showMobile } = storeToRefs(useGeneralStore());
 </script>

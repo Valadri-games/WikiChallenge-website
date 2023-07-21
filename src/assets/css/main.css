@@ -5,7 +5,13 @@
 /* Override rem size */
 
 :root {
-    font-size: 11.2px;
+    font-size: 9.5px;
+}
+
+@media screen and (max-width: 850px) {
+    :root {
+        font-size: 10.5px;
+    }
 }
 
 /* Root variables */

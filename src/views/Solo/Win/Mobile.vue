@@ -1,7 +1,7 @@
 <template>
     <div class="absolute w-full h-full overflow-hidden flex flex-col">
         <div class="absolute h-full w-full duration-500" :class="{ 'top-0': showPath == false, '-top-full': showPath }">
-            <div class="flex justify-center items-center" :class="{ 'opacity-0': !animationStep2 }">
+            <div class="flex justify-center items-center duration-500" :class="{ 'opacity-0': !animationStep2 }">
                 <Avatar :shadow="false" :win="true" :avatarID=avatarid class="h-72 w-72" />
             </div>
 
@@ -11,11 +11,19 @@
                 <Text class="text-center w-full mt-6 pl-8 pr-8"> Tu as trouvé la page "{{ endPage.replaceAll("_", " ") }}" </Text>
             </div>
 
-            <div class="mt-14 flex flex-row ml-12 mr-12 justify-center">
+            <div class="mt-14 flex flex-row ml-12 mr-12 justify-center items-center">
                 <Header class="w-0 overflow-hidden duration-500" :class="{ 'w-[92px]': animationStep1 }"> Score:&nbsp; </Header>
                 
                 <transition name="scale">
                     <Header v-if="animationStep0"> {{ scoreCounter }} </Header>
+                </transition>
+
+                <transition name="fade">
+                    <div class="ml-2 overflow-hidden duration-500 w-0" :class="{ 'opacity-0': !animationStep5, 'w-28': animationStep5 }">
+                        <div class="scale-90 border-3 border-100 bg-accent2 p-2 pl-5 pr-5 rounded-full w-fit h-fit">
+                            <Text class="!text-3xl !font-bold"> x{{ scoreMultiplier }} </Text>
+                        </div>
+                    </div>
                 </transition>
             </div>
 
@@ -51,7 +59,7 @@
 
             <div class="relative flex-1 overflow-auto pt-6">
                 <div v-for="(pageTitle, index) in pagesPath" class="ml-24 mr-10 mb-4">
-                    <div v-if="pagesPath.length >= 2 && pagesPath[index] == pagesPath[index - 1]" class="mb-6 border-3 border-100 bg-accent2 p-2 pl-5 pr-5 rounded-full w-fit">
+                    <div v-if="pagesPath.length >= 2 && pagesPath[index] == pagesPath[index - 1]" class="mb-6 border-3 border-100 bg-accent2 p-2 pl-5 pr-5 rounded-full w-fit h-fit">
                         <Text> Pause </Text>
                     </div>
 
@@ -94,7 +102,7 @@
                 </div>
 
                 <div v-if="gameMode != 5 && gameMode != 4" class="mt-10 flex flex-col justify-center items-center">
-                    <Text> Ce parcours était-il trop difficile ? </Text>
+                    <Text> Ce parcours était-il difficile ? </Text>
 
                     <div class="mt-4 flex flex-row gap-10 pl-10 pr-10 justify-center items-center">
                         <label class="p-4 pl-8 pr-8 border-4 border-100 rounded-3xl color-100 text-size shadow bg-900 duration-300" :class="{ 'bg-accent': pathDifficulty ==  1}">
@@ -152,10 +160,11 @@
     const animationStep2 = ref(false);
     const animationStep3 = ref(false);
     const animationStep4 = ref(false);
+    const animationStep5 = ref(false);
 
-    const { avatarid, loggedIn } = storeToRefs(useAccountStore());
+    const { avatarid, loggedIn, scoreMultiplier } = storeToRefs(useAccountStore());
 
-    const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score, gameMode } = storeToRefs(useSoloModeStore());
+    const { endPage, pagesPath, totalTime, gameTimerPauses, steps, score, gameMode, scoreMultiplied } = storeToRefs(useSoloModeStore());
 
     const showPath = ref(false);
 
@@ -183,12 +192,20 @@
     }
 
     let counter: any;
+    let counterStep = 1;
     function counterAnimation() {
         scoreCounter.value += 7;
 
-        if(scoreCounter.value >= score.value) {
-            scoreCounter.value = score.value;
-            clearInterval(counter);
+        if(counterStep == 1) {
+            if(scoreCounter.value >= score.value) {
+                scoreCounter.value = score.value;
+                clearInterval(counter);
+            }
+        } else if(counterStep == 2) {
+            if(scoreCounter.value >= scoreMultiplied.value) {
+                scoreCounter.value = scoreMultiplied.value;
+                clearInterval(counter);
+            }
         }
     }
 
@@ -213,6 +230,19 @@
         setTimeout(() => {
             animationStep4.value = true;
         }, 300 + 600 + 200 + 100 + 200);
+
+        setTimeout(() => {
+            if(scoreMultiplied.value > score.value) {
+                animationStep5.value = true;
+            }
+        }, 300 + 600 + 200 + 100 + 200 + 200);
+
+        setTimeout(() => {
+            if(scoreMultiplied.value > score.value) {
+                counterStep = 2;
+                counter = setInterval(counterAnimation, 30);
+            }
+        }, 300 + 600 + 200 + 100 + 200 + 200 + 500);
     });
 </script>
 

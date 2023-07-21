@@ -28,6 +28,7 @@ export const useGeneralStore = defineStore('general', () => {
     const showPasswordError = ref(false);
     const showUnavailableName = ref(false);
     const showDownloadUserDataError = ref(false);
+    const showServerError = ref(false);
 
     /* Maximum time between session to propose a sesion restore */
     const minimumToRestore = ref(data.minimumToRestore || false);
@@ -47,6 +48,9 @@ export const useGeneralStore = defineStore('general', () => {
     
     /* General state */
     const hamburgerChecked = ref(false);
+
+    /* Temporary leaderboard data */
+    const leaderboardData: Ref<any> = ref([]);
 
     /* Responsive */
     const showMobile = ref(Utils.isUserMobile());
@@ -83,6 +87,7 @@ export const useGeneralStore = defineStore('general', () => {
         showPasswordError,
         showUnavailableName,
         showDownloadUserDataError,
+        showServerError,
 
         minimumToRestore,
         proposeRestore,
@@ -95,6 +100,8 @@ export const useGeneralStore = defineStore('general', () => {
         homeFormStep,
 
         hamburgerChecked,
+
+        leaderboardData,
         
         showMobile,
 

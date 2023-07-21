@@ -66,13 +66,14 @@ export default class Utils {
         return ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin","Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
     }
 
-    static getDateText(date: number) {
+    static getDateText(date: number, getDay: boolean = false) {
         let fullDate = new Date(date);
         
         let month = fullDate.getMonth();
         let year = fullDate.getFullYear();
+        let day = fullDate.getDate();
 
-        return Utils.getMonths()[month] + " " + year;
+        return (getDay == true ? day + " " : "") + Utils.getMonths()[month] + " " + year;
     }
 
     static getTimeToTomorrow() {

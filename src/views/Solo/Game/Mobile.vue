@@ -6,11 +6,11 @@
                     <img src="@/assets/icons/target.svg" />
                 </div>
 
-                <div class="flex-1 flex whitespace-nowrap overflow-hidden">
-                    <Text @click="showEndSummary = true"> {{ endPage.replaceAll("_", " ") }} </Text>
+                <div class="flex-1 flex overflow-hidden">
+                    <Text class="whitespace-nowrap overflow-hidden text-ellipsis" @click="showEndSummary = true"> {{ endPage.replaceAll("_", " ") }} </Text>
                 </div>
 
-                <div @click="showEndSummary = true" class="h-12 w-12 text-center flex flex-col justify-center items-center border-3 border-100 rounded-xl">
+                <div @click="showEndSummary = true" class="ml-4 h-12 w-12 text-center flex flex-col justify-center items-center border-3 border-100 rounded-xl">
                     <Text class=" !font-bold !text-3xl"> ? </Text>
                 </div>
 
@@ -60,7 +60,9 @@
             </div>
         </Transition>
 
-        <div class="flex-1 overflow-hidden w-full">
+        <Text class="w-full text-center mt-3 mb-3"> {{ currentPage }} </Text>
+
+        <div class="flex-1 flex-col overflow-hidden w-full">
             <WikiView @loaded="viewLoaded" @loading="viewLoading" @win="win" @pageNotFound="showErrorModal = true" :class="{ 'hidden': loading }" />
 
             <div class="w-full h-full pl-10 pr-10 flex flex-col justify-center" v-if="loading && gameStarted">
@@ -75,7 +77,7 @@
         </Teleport>
 
         <Teleport to="body">
-            <ModalQuit :show="showModalQuit" @close="showModalQuit = false"></ModalQuit>
+            <ModalQuit :dailychallenge="gameMode == 5 ? true : false" :show="showModalQuit" @close="showModalQuit = false" @quit="quitGame"></ModalQuit>
         </Teleport>
 
         <Teleport to="body">
@@ -118,7 +120,7 @@
     import Header from '@/ui/text/Header.vue';
     import SmallHeader from '@/ui/text/SmallHeader.vue';
 
-    const { endPage, gameStarted, gameEnded, gameStartDate, gameTimerPauses, pagesPath, currentPage, steps, endPageSummary } = storeToRefs(useSoloModeStore());
+    const { endPage, gameStarted, gameEnded, gameStartDate, gameTimerPauses, pagesPath, currentPage, steps, endPageSummary, gameMode } = storeToRefs(useSoloModeStore());
 
     const menuOpen = ref(false);
 
@@ -170,6 +172,11 @@
                 gameTimerPauses.value.push(Date.now());
             }
         }
+    }
+
+    function quitGame() {
+        // Save today participation to daily challenge
+        router.push('/solo');
     }
 
     function win() {
